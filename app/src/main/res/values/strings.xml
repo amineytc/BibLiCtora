@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">BibLiCtora</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Bottom Navigation Titles -->
+    <string name="home">Home</string>
+    <string name="favorite">Favorite</string>
+    <string name="my_books">My Books</string>
 </resources>
