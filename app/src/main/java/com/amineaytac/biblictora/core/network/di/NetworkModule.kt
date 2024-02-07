@@ -44,7 +44,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRickyRestApi(retrofit: Retrofit): BookRestApi {
+    fun provideBookRestApi(retrofit: Retrofit): BookRestApi {
         return retrofit.create(BookRestApi::class.java)
     }
 }
