@@ -8,7 +8,9 @@ import com.amineaytac.biblictora.databinding.FragmentHomeBinding
 import com.amineaytac.biblictora.ui.discover.DiscoverFragment
 import com.amineaytac.biblictora.ui.readinglist.ReadingListFragment
 import com.amineaytc.biblictora.util.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val binding by viewBinding(FragmentHomeBinding::bind)
