@@ -3,7 +3,6 @@ package com.amineaytac.biblictora.ui.discover
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.amineaytac.biblictora.R
@@ -15,15 +14,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
     private val binding by viewBinding(FragmentDiscoverBinding::bind)
-
-    private val viewModel :  DiscoverViewModel by viewModels()
+    private val viewModel: DiscoverViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         callInitialViewModelFunctions()
         observeUi()
-
     }
 
     private fun callInitialViewModelFunctions() {
@@ -34,16 +31,15 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         viewModel.bookScreenUiState.observe(viewLifecycleOwner) {
             when {
                 it.isError -> {
-                    Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_LONG)
-                    Log.d("discoverdata", "error")
+                    Log.d("discover_data", it.errorMessage.toString())
                 }
 
                 it.isLoading -> {
-                    Log.d("discoverdata", "loading")
+                    Log.d("discover_data", "loading")
                 }
 
                 else -> {
-                    Log.d("discoverdata", it.books.toString())
+                    Log.d("discover_data", it.books.toString())
                 }
             }
         }
