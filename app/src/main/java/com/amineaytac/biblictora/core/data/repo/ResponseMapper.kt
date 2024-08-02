@@ -12,8 +12,8 @@ typealias AuthorsResponse = List<Author?>?
 typealias LanguageResponse = List<String?>?
 
 fun RestBooksResponse.toBookList(): List<Book> {
-    return body()!!.results!!.map {
-        val bookshelves = it?.bookshelves?.map {
+    return body()!!.results!!.map { book ->
+        val bookshelves = book?.bookshelves?.map {
             if (it.isNullOrEmpty()) {
                 ""
             } else {
@@ -22,13 +22,13 @@ fun RestBooksResponse.toBookList(): List<Book> {
         } ?: emptyList()
 
         Book(
-            it?.id ?: -1,
-            it?.authors.toAuthorString(),
+            book?.id ?: -1,
+            book?.authors.toAuthorString(),
             bookshelves,
-            it?.languages.toLanguageString(),
-            it?.title.orEmpty(),
-            it?.formats?.toReadFormats() ?: ReadFormats("", ""),
-            it?.formats?.imagejpeg.toString()
+            book?.languages.toLanguageString(),
+            book?.title.orEmpty(),
+            book?.formats?.toReadFormats() ?: ReadFormats("", ""),
+            book?.formats?.imagejpeg.toString()
         )
     }
 }
@@ -38,11 +38,15 @@ fun AuthorsResponse.toAuthorString(): String {
 
     this?.forEachIndexed { index, author ->
         val name = author?.name?.split(", ")
-        authors += name?.get(1) ?: ""
-        authors += " "
-        authors += name?.get(0) ?: ""
-        if (this.size != index + 1) {
-            authors += ", "
+        if(name?.size == 1){
+            authors += name[0]
+        }else {
+            authors += name?.get(1) ?: ""
+            authors += " "
+            authors += name?.get(0) ?: ""
+            if (this.size != index + 1) {
+                authors += ", "
+            }
         }
     }
     return authors
