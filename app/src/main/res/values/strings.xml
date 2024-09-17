@@ -7,4 +7,39 @@
     <string name="home">Home</string>
     <string name="favorite">Favorite</string>
     <string name="my_books">My Books</string>
+
+    <string name="image_button">Image Button</string>
+    <string name="search">search</string>
+    <string name="filter">Filter</string>
+    <string name="zero_results">0 results</string>
+
+    <string-array name="languages">
+        <item>0,English,en</item>
+        <item>1,Finnish,fi</item>
+        <item>2,French,fr</item>
+        <item>3,German,de</item>
+        <item>4,Greek,el</item>
+        <item>5,Italian,it</item>
+        <item>6,Swedish,sv</item>
+        <item>7,Dutch,nl</item>
+        <item>8,Spanish,es</item>
+        <item>9,Hungarian,hu</item>
+        <item>10,Chinese,zh</item>
+        <item>11,Portuguese,pt</item>
+    </string-array>
+
+    <integer-array name="flag_drawable_ids">
+        <item>@drawable/ic_flag_united_kingdom</item>
+        <item>@drawable/ic_flag_finland</item>
+        <item>@drawable/ic_flag_france</item>
+        <item>@drawable/ic_flag_germany</item>
+        <item>@drawable/ic_flag_greece</item>
+        <item>@drawable/ic_flag_italy</item>
+        <item>@drawable/ic_flag_sweden</item>
+        <item>@drawable/ic_flag_netherlands</item>
+        <item>@drawable/ic_flag_spain</item>
+        <item>@drawable/ic_flag_hungary</item>
+        <item>@drawable/ic_flag_china</item>
+        <item>@drawable/ic_flag_portugal</item>
+    </integer-array>
 </resources>
