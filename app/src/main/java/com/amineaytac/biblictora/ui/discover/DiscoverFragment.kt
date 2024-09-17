@@ -20,6 +20,9 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
     private val binding by viewBinding(FragmentDiscoverBinding::bind)
     private val viewModel: DiscoverViewModel by viewModels()
     private var isChipGroupVisible = false
+    private val chips = mutableListOf<LanguageChipBox>()
+    private var chipClickStates = Array(12) { false }
+    private lateinit var chipAdapter: ChipAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,8 +32,39 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         bindBackDrop()
     }
 
+    private fun bindChipAdapter() = with(binding) {
+
+        chipClickStates = viewModel.getList()
+        recyclerView.setHasFixedSize(true)
+        chipAdapter =
+            ChipAdapter(recyclerView, requireContext(), chips, chipClickStates) { position ->
+                viewModel.setChipClickListener(position)
+            }
+
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+        recyclerView.adapter = chipAdapter
+
+        chips.clear()
+        val languages = resources.getStringArray(R.array.languages)
+        val flagDrawableIds = resources.obtainTypedArray(R.array.flag_drawable_ids)
+
+        languages.forEachIndexed { index, str ->
+            val (id, language, abbreviation) = str.split(",")
+            chips.add(
+                LanguageChipBox(
+                    id.toInt(),
+                    language,
+                    abbreviation,
+                    flagDrawableIds.getResourceId(index, -1)
+                )
+            )
+        }
+    }
+
     private fun bindBackDrop() = with(binding) {
-        
+
+        bindChipAdapter()
+        bindSearchView()
         isChipGroupVisible = viewModel.getChipGroupVisibility()
         checkChipGroupVisibility()
 
@@ -59,6 +93,26 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             recyclerView.visibility = View.VISIBLE
             filterButton.visibility = View.VISIBLE
         }
+    }
+
+    private fun bindSearchView() = with(binding) {
+
+        searchView.setQuery(viewModel.getSearchText(), false)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    viewModel.setSearchText(it)
+                }
+                return true
+            }
+        })
     }
 
     private fun toggleFilters(sheetBehavior: BottomSheetBehavior<LinearLayout>) {
