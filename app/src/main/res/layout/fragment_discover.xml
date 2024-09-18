@@ -34,7 +34,9 @@
                 android:layout_marginLeft="@dimen/_8sdp"
                 android:layout_marginRight="@dimen/_8sdp"
                 android:background="@drawable/bg_search"
-                android:hint="@string/search" />
+                android:closeIcon="@drawable/ic_close"
+                android:searchIcon="@drawable/ic_search"
+                android:theme="@style/CustomSearchViewStyle" />
 
         </LinearLayout>
 
