@@ -21,8 +21,8 @@
     </style>
 
     <style name="ClickedChip" parent="Widget.MaterialComponents.Chip.Choice">
-        <item name="chipBackgroundColor">@color/transparent_grey</item>
-        <item name="rippleColor">@color/transparent_grey</item>
+        <item name="chipBackgroundColor">@color/medium_grey_green</item>
+        <item name="rippleColor">@color/moselle_green</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlayChip</item>
         <item name="android:textAppearance">@style/CustomChipTextAppearance</item>
         <item name="chipStartPadding">@dimen/_4sdp</item>
@@ -31,7 +31,7 @@
 
     <style name="NotClickedChip" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/white</item>
-        <item name="rippleColor">@color/transparent_grey</item>
+        <item name="rippleColor">@color/moselle_green</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlayChip</item>
         <item name="android:textAppearance">@style/CustomChipTextAppearance</item>
         <item name="chipStartPadding">@dimen/_4sdp</item>
