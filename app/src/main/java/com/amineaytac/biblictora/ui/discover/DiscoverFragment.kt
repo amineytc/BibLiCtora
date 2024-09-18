@@ -34,7 +34,7 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
     private fun bindChipAdapter() = with(binding) {
 
-        chipClickStates = viewModel.getList()
+        chipClickStates = viewModel.getChipClickStates()
         recyclerView.setHasFixedSize(true)
         chipAdapter =
             ChipAdapter(recyclerView, requireContext(), chips, chipClickStates) { position ->
@@ -52,10 +52,7 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             val (id, language, abbreviation) = str.split(",")
             chips.add(
                 LanguageChipBox(
-                    id.toInt(),
-                    language,
-                    abbreviation,
-                    flagDrawableIds.getResourceId(index, -1)
+                    id.toInt(), language, abbreviation, flagDrawableIds.getResourceId(index, -1)
                 )
             )
         }

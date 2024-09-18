@@ -28,8 +28,7 @@ class DiscoverViewModel @Inject constructor(private val getAllBooksUseCase: GetA
                     is ResponseState.Error -> {
                         _bookScreenUiState.postValue(
                             BookListScreenUiState(
-                                isError = true,
-                                errorMessage = responseState.message
+                                isError = true, errorMessage = responseState.message
                             )
                         )
                     }
@@ -50,7 +49,7 @@ class DiscoverViewModel @Inject constructor(private val getAllBooksUseCase: GetA
         chipClickStates[position] = !chipClickStates[position]
     }
 
-    fun getList(): Array<Boolean> {
+    fun getChipClickStates(): Array<Boolean> {
         return chipClickStates
     }
 
