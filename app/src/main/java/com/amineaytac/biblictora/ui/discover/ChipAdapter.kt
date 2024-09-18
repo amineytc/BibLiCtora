@@ -39,11 +39,8 @@ class ChipAdapter(
             chip.isChipIconVisible = true
             chip.chipIcon = AppCompatResources.getDrawable(root.context, item.iconFlag)
 
-            val spanCount = (recyclerView.layoutManager as GridLayoutManager).spanCount
-            val column = position % spanCount
-
+            val column = position % (recyclerView.layoutManager as GridLayoutManager).spanCount
             val layoutParams = chip.layoutParams as FrameLayout.LayoutParams
-            layoutParams.setMargins(0, 2, 0, 2)
 
             when (column) {
                 0 -> {
