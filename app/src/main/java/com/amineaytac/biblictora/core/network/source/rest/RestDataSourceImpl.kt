@@ -10,4 +10,12 @@ class RestDataSourceImpl @Inject constructor(private val bookRestApi: BookRestAp
     override suspend fun getAllBooks(): Response<BookResponse> {
         return bookRestApi.getAllBooks()
     }
+
+    override suspend fun getBooksWithSearch(search: String): Response<BookResponse> {
+        return bookRestApi.getBooksWithSearch(search)
+    }
+
+    override suspend fun getBooksWithLanguages(languages: List<String>): Response<BookResponse> {
+        return bookRestApi.getBooksWithLanguages(languages)
+    }
 }

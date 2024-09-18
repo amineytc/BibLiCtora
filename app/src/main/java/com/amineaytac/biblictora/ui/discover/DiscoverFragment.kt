@@ -79,6 +79,32 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         btnBackdropFilter.setOnClickListener {
             toggleFilters(sheetBehavior)
         }
+
+        btnShowResults.setOnClickListener {
+            val languages = chipClickStatesToLanguageList()
+            val searchText = viewModel.getSearchText()
+            if (searchText.isNotEmpty()) {
+                viewModel.getBooksWithSearch(searchText, languages)
+            } else if (languages.isNotEmpty() && searchText.isEmpty()) {
+                viewModel.getBooksWithLanguages(languages)
+            } else {
+                viewModel.getAllBooks()
+            }
+        }
+    }
+
+    private fun chipClickStatesToLanguageList(): List<String> {
+        val ids = mutableListOf<Int>()
+        chipClickStates.forEachIndexed { index, bool ->
+            if (bool) {
+                ids.add(index)
+            }
+        }
+        if (ids.isEmpty()) return emptyList()
+
+        return ids.map {
+            chips[it].abbreviation
+        }
     }
 
     private fun checkChipGroupVisibility() = with(binding) {
@@ -98,7 +124,11 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
-
+                    if (it.isNotEmpty()) {
+                        viewModel.getBooksWithSearch(it, chipClickStatesToLanguageList())
+                    } else {
+                        viewModel.getAllBooks()
+                    }
                 }
                 return true
             }

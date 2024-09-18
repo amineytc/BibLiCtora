@@ -19,4 +19,35 @@ class BookRepositoryImpl @Inject constructor(private val restDataSource: RestDat
             emit(ResponseState.Error(it.message.orEmpty()))
         }
     }
+
+    override suspend fun getBooksWithSearch(
+        search: String,
+        languages: List<String>
+    ): Flow<ResponseState<List<Book>>> {
+        return flow {
+            emit(ResponseState.Loading)
+            val response = restDataSource.getBooksWithSearch(search)
+            if (languages.isEmpty()) {
+                emit(ResponseState.Success(response.mapTo { it.toBookList() }))
+            } else {
+                emit(ResponseState.Success(response.mapTo {
+                    it.toBookListWithLanguagesFilter(
+                        languages
+                    )
+                }))
+            }
+        }.catch {
+            emit(ResponseState.Error(it.message.orEmpty()))
+        }
+    }
+
+    override suspend fun getBooksWithLanguages(languages: List<String>): Flow<ResponseState<List<Book>>> {
+        return flow {
+            emit(ResponseState.Loading)
+            val response = restDataSource.getBooksWithLanguages(languages)
+            emit(ResponseState.Success(response.mapTo { it.toBookList() }))
+        }.catch {
+            emit(ResponseState.Error(it.message.orEmpty()))
+        }
+    }
 }

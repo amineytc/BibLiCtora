@@ -33,14 +33,44 @@ fun RestBooksResponse.toBookList(): List<Book> {
     }
 }
 
+fun RestBooksResponse.toBookListWithLanguagesFilter(languages: List<String>): List<Book> {
+    return body()!!.results!!.filter {
+        var control = false
+        languages.forEach { language ->
+            if (it?.languages?.contains(language) == true) {
+                control = true
+            }
+        }
+        control
+    }.map { book ->
+        val bookshelves = book?.bookshelves?.map {
+            if (it.isNullOrEmpty()) {
+                ""
+            } else {
+                it
+            }
+        } ?: emptyList()
+
+        Book(
+            book?.id ?: -1,
+            book?.authors.toAuthorString(),
+            bookshelves,
+            book?.languages.toLanguageString(),
+            book?.title.orEmpty(),
+            book?.formats?.toReadFormats() ?: ReadFormats("", ""),
+            book?.formats?.imagejpeg.toString()
+        )
+    }
+}
+
 fun AuthorsResponse.toAuthorString(): String {
     var authors = ""
 
     this?.forEachIndexed { index, author ->
         val name = author?.name?.split(", ")
-        if(name?.size == 1){
+        if (name?.size == 1) {
             authors += name[0]
-        }else {
+        } else {
             authors += name?.get(1) ?: ""
             authors += " "
             authors += name?.get(0) ?: ""
@@ -65,7 +95,6 @@ fun LanguageResponse.toLanguageString(): String {
 
 fun Formats.toReadFormats(): ReadFormats {
     return ReadFormats(
-        this.texthtml.toString(),
-        this.texthtmlCharsetutf8.toString()
+        this.texthtml.toString(), this.texthtmlCharsetutf8.toString()
     )
 }
