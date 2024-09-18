@@ -17,6 +17,10 @@ class DiscoverViewModel @Inject constructor(private val getAllBooksUseCase: GetA
     private val _bookScreenUiState = MutableLiveData(BookListScreenUiState.initial())
     val bookScreenUiState: LiveData<BookListScreenUiState> get() = _bookScreenUiState
 
+    private var chipClickStates = Array(12) { false }
+    private var searchText = ""
+    private var isChipGroupVisible = false
+
     fun getAllBooks() {
         viewModelScope.launch {
             getAllBooksUseCase().collect { responseState ->
@@ -24,8 +28,7 @@ class DiscoverViewModel @Inject constructor(private val getAllBooksUseCase: GetA
                     is ResponseState.Error -> {
                         _bookScreenUiState.postValue(
                             BookListScreenUiState(
-                                isError = true,
-                                errorMessage = responseState.message
+                                isError = true, errorMessage = responseState.message
                             )
                         )
                     }
@@ -40,5 +43,29 @@ class DiscoverViewModel @Inject constructor(private val getAllBooksUseCase: GetA
                 }
             }
         }
+    }
+
+    fun setChipClickListener(position: Int) {
+        chipClickStates[position] = !chipClickStates[position]
+    }
+
+    fun getChipClickStates(): Array<Boolean> {
+        return chipClickStates
+    }
+
+    fun setSearchText(str: String) {
+        searchText = str
+    }
+
+    fun getSearchText(): String {
+        return searchText
+    }
+
+    fun setChipGroupVisibility() {
+        isChipGroupVisible = !isChipGroupVisible
+    }
+
+    fun getChipGroupVisibility(): Boolean {
+        return isChipGroupVisible
     }
 }
