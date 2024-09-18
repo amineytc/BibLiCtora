@@ -49,16 +49,18 @@
             android:layout_marginTop="@dimen/_12sdp"
             android:orientation="horizontal" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/filterButton"
+        <Button
+            android:id="@+id/btnShowResults"
             style="@style/Text.H2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="end"
             android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_16sdp"
-            android:background="@drawable/bg_filter"
-            android:text="@string/filter" />
+            android:backgroundTint="@color/medium_grey_green"
+            android:text="@string/show_results"
+            android:textColor="@color/oyster_island" />
 
     </LinearLayout>
 

@@ -88,10 +88,10 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
         if (!isChipGroupVisible) {
             recyclerView.visibility = View.GONE
-            filterButton.visibility = View.GONE
+            btnShowResults.visibility = View.GONE
         } else {
             recyclerView.visibility = View.VISIBLE
-            filterButton.visibility = View.VISIBLE
+            btnShowResults.visibility = View.VISIBLE
         }
     }
 
