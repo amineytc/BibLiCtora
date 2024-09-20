@@ -1,15 +1,18 @@
 package com.amineaytac.biblictora.ui.discover
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amineaytac.biblictora.R
+import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.databinding.FragmentDiscoverBinding
+import com.amineaytac.biblictora.util.gone
+import com.amineaytac.biblictora.util.visible
 import com.amineaytc.biblictora.util.viewBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,8 +24,10 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
     private val viewModel: DiscoverViewModel by viewModels()
     private var isChipGroupVisible = false
     private val chips = mutableListOf<LanguageChipBox>()
+    private var books = emptyList<Book>()
     private var chipClickStates = Array(12) { false }
     private lateinit var chipAdapter: ChipAdapter
+    private lateinit var bookAdapter: DiscoverBookAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,6 +61,14 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
                 )
             )
         }
+    }
+
+    private fun bindBookAdapter() = with(binding) {
+        bookAdapter =
+            DiscoverBookAdapter(books, resources) {  }
+
+        rvBook.layoutManager = GridLayoutManager(requireContext(), 2)
+        rvBook.adapter = bookAdapter
     }
 
     private fun bindBackDrop() = with(binding) {
@@ -158,15 +171,21 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         viewModel.bookScreenUiState.observe(viewLifecycleOwner) {
             when {
                 it.isError -> {
-                    Log.d("discover_data", it.errorMessage.toString())
+                    binding.progressBar.gone()
+                    binding.rvBook.gone()
+                    Toast.makeText(requireContext(), "${it.errorMessage}", Toast.LENGTH_LONG).show()
                 }
 
                 it.isLoading -> {
-                    Log.d("discover_data", "loading")
+                    binding.progressBar.visible()
+                    binding.rvBook.gone()
                 }
 
                 else -> {
-                    Log.d("discover_data", it.books.toString())
+                    books = it.books
+                    binding.progressBar.gone()
+                    binding.rvBook.visible()
+                    bindBookAdapter()
                 }
             }
         }
