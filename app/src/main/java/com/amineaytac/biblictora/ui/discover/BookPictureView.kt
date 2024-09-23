@@ -38,6 +38,11 @@ class BookPictureView @JvmOverloads constructor(
         strokeWidth = frameStrokeWidth.toFloat()
     }
 
+    private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = ContextCompat.getColor(context, R.color.white)
+        style = Paint.Style.FILL
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
@@ -48,6 +53,7 @@ class BookPictureView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         canvas.clipPath(framePath)
+        canvas.drawPath(framePath, fillPaint)
         bitmap?.let {
             canvas.drawBitmap(it, matrix, imagePaint)
         }

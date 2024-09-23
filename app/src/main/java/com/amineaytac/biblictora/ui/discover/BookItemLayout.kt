@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.amineaytac.biblictora.R
+
 class BookItemLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -21,13 +22,17 @@ class BookItemLayout @JvmOverloads constructor(
 
     private val framePath = Path()
     private val frameStrokeWidth = 8.toDp
-
     private val viewRectF = RectF()
 
     private val framePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = ContextCompat.getColor(context, R.color.black)
         style = Paint.Style.STROKE
         strokeWidth = frameStrokeWidth.toFloat()
+    }
+
+    private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = ContextCompat.getColor(context, R.color.toad)
+        style = Paint.Style.FILL
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -39,6 +44,7 @@ class BookItemLayout @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         canvas.clipPath(framePath)
+        canvas.drawPath(framePath, fillPaint)
         canvas.drawPath(framePath, framePaint)
     }
 
@@ -64,5 +70,6 @@ class BookItemLayout @JvmOverloads constructor(
 
         invalidate()
     }
+
     val Int.toDp: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 }

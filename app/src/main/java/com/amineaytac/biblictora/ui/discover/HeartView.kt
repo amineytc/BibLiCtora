@@ -2,12 +2,12 @@ package com.amineaytac.biblictora.ui.discover
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.amineaytac.biblictora.R
 
 class HeartView @JvmOverloads constructor(
@@ -20,7 +20,7 @@ class HeartView @JvmOverloads constructor(
     private var isClicked = false
 
     private val heartPaint = Paint().apply {
-        color = Color.TRANSPARENT
+        color = ContextCompat.getColor(context, R.color.white)
         isAntiAlias = true
         style = Paint.Style.FILL
     }
@@ -37,8 +37,14 @@ class HeartView @JvmOverloads constructor(
             0, 0
         ).apply {
             try {
-                startColor = getColor(R.styleable.DrawHeart_startColor, Color.TRANSPARENT)
-                endColor = getColor(R.styleable.DrawHeart_endColor, Color.RED)
+                startColor = getColor(
+                    R.styleable.DrawHeart_startColor,
+                    ContextCompat.getColor(context, R.color.white)
+                )
+                endColor = getColor(
+                    R.styleable.DrawHeart_endColor,
+                    ContextCompat.getColor(context, R.color.moselle_green)
+                )
             } finally {
                 recycle()
             }
