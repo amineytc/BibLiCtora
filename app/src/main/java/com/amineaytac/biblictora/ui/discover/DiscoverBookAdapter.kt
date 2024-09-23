@@ -26,6 +26,7 @@ class DiscoverBookAdapter(
         fun bind(item: Book, position: Int) = with(binding) {
 
             tvName.text = item.title
+            tvWriter.text = item.authors
 
             val imageTarget = object : Target {
                 override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
@@ -36,7 +37,7 @@ class DiscoverBookAdapter(
                     pictureView.setBitmap(
                         BitmapFactory.decodeResource(
                             resources,
-                            R.drawable.ic_biblictora
+                            R.drawable.ic_image_load
                         )
                     )
                 }

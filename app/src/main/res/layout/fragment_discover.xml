@@ -37,7 +37,6 @@
                 android:closeIcon="@drawable/ic_close"
                 android:searchIcon="@drawable/ic_search"
                 android:theme="@style/CustomSearchViewStyle" />
-
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -61,7 +60,6 @@
             android:backgroundTint="@color/medium_grey_green"
             android:text="@string/show_results"
             android:textColor="@color/oyster_island" />
-
     </LinearLayout>
 
     <!--This is the backdrop's content with a BottomSheetBehaviour applied to it-->
@@ -123,6 +121,7 @@
                     android:id="@+id/progressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:indeterminateTint="@color/moselle_green"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -140,6 +139,5 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -15,6 +15,7 @@
     <string name="zero_results">0 results</string>
 
     <string name="heart_view">Favorite Heart Icon</string>
+    <string name="item_names">Item Names</string>
 
     <string-array name="languages">
         <item>0,English,en</item>

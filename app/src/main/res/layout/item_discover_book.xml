@@ -8,8 +8,8 @@
     <com.amineaytac.biblictora.ui.discover.BookItemLayout
         android:id="@+id/bookItemLayout"
         android:layout_width="@dimen/_130sdp"
-        android:layout_height="@dimen/_120sdp"
-        android:layout_marginStart="@dimen/_14sdp"
+        android:layout_height="@dimen/_140sdp"
+        android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginBottom="@dimen/_8sdp">
 
         <com.amineaytac.biblictora.ui.discover.HeartView
@@ -23,37 +23,55 @@
 
         <FrameLayout
             android:layout_width="@dimen/_80sdp"
-            android:layout_height="@dimen/_100sdp"
+            android:layout_height="@dimen/_110sdp"
             android:layout_gravity="top|end">
 
             <ProgressBar
                 android:id="@+id/progressBarPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/moselle_green" />
 
             <com.amineaytac.biblictora.ui.discover.BookPictureView
                 android:id="@+id/pictureView"
                 android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_100sdp" />
+                android:layout_height="@dimen/_110sdp" />
         </FrameLayout>
 
 
         <TextView
             android:id="@+id/tvName"
             style="@style/Text.H2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="end|bottom"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
             android:ellipsize="end"
             android:gravity="end"
             android:maxLines="1"
             android:paddingVertical="@dimen/_4sdp"
-            android:paddingStart="@dimen/_12sdp"
-            android:paddingEnd="@dimen/_8sdp"
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp"
-            tools:text="Charles Dickens" />
+            tools:text="@string/item_names" />
+
+        <TextView
+            android:id="@+id/tvWriter"
+            style="@style/Text.H2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_11ssp"
+            tools:text="@string/item_names" />
 
     </com.amineaytac.biblictora.ui.discover.BookItemLayout>
 </FrameLayout>
