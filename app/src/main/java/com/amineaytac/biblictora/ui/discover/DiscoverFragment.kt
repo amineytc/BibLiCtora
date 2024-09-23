@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.Toast
@@ -31,6 +32,7 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
     private var chipClickStates = Array(12) { false }
     private lateinit var chipAdapter: ChipAdapter
     private lateinit var bookAdapter: DiscoverBookAdapter
+    private lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,6 +95,8 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             checkChipGroupVisibility()
         }
 
+        sheetBehavior = BottomSheetBehavior.from(linearLayout)
+
         val sheetBehavior = BottomSheetBehavior.from(linearLayout)
         sheetBehavior.isFitToContents = false
         sheetBehavior.isHideable = false
@@ -116,6 +120,7 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             } else {
                 viewModel.getAllBooks()
             }
+            toggleFilters(sheetBehavior)
         }
     }
 
@@ -150,10 +155,10 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
+                    toggleFilters(sheetBehavior)
                     val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
                             as InputMethodManager
                     inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
-
                     if (it.isNotEmpty()) {
                         viewModel.getBooksWithSearch(it, chipClickStatesToLanguageList())
                     } else {
