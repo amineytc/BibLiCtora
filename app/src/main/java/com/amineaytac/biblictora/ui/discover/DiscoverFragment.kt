@@ -1,13 +1,16 @@
 package com.amineaytac.biblictora.ui.discover
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.amineaytac.biblictora.R
 import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.databinding.FragmentDiscoverBinding
@@ -35,6 +38,12 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         callInitialViewModelFunctions()
         observeUi()
         bindBackDrop()
+
+        binding.rvBook.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                binding.swipeRefresh.isEnabled = !recyclerView.canScrollVertically(-1)
+            }
+        })
     }
 
     private fun bindChipAdapter() = with(binding) {
@@ -97,6 +106,10 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             val languages = chipClickStatesToLanguageList()
             val searchText = viewModel.getSearchText()
             if (searchText.isNotEmpty()) {
+                val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
+                        as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+
                 viewModel.getBooksWithSearch(searchText, languages)
             } else if (languages.isNotEmpty() && searchText.isEmpty()) {
                 viewModel.getBooksWithLanguages(languages)
@@ -137,6 +150,10 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
+                    val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
+                            as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+
                     if (it.isNotEmpty()) {
                         viewModel.getBooksWithSearch(it, chipClickStatesToLanguageList())
                     } else {
