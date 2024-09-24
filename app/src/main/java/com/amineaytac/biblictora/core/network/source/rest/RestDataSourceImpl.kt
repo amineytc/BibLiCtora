@@ -7,15 +7,18 @@ import javax.inject.Inject
 class RestDataSourceImpl @Inject constructor(private val bookRestApi: BookRestApi) :
     RestDataSource {
 
-    override suspend fun getAllBooks(): Response<BookResponse> {
-        return bookRestApi.getAllBooks()
+    override suspend fun getAllBooks(page: Int): Response<BookResponse> {
+        return bookRestApi.getAllBooks(page)
     }
 
-    override suspend fun getBooksWithSearch(search: String): Response<BookResponse> {
-        return bookRestApi.getBooksWithSearch(search)
+    override suspend fun getBooksWithSearch(page: Int, search: String): Response<BookResponse> {
+        return bookRestApi.getBooksWithSearch(page, search)
     }
 
-    override suspend fun getBooksWithLanguages(languages: List<String>): Response<BookResponse> {
-        return bookRestApi.getBooksWithLanguages(languages)
+    override suspend fun getBooksWithLanguages(
+        page: Int,
+        languages: List<String>
+    ): Response<BookResponse> {
+        return bookRestApi.getBooksWithLanguages(page, languages)
     }
 }

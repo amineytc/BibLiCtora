@@ -5,7 +5,7 @@ import retrofit2.Response
 
 interface RestDataSource {
 
-    suspend fun getAllBooks(): Response<BookResponse>
-    suspend fun getBooksWithSearch(search: String): Response<BookResponse>
-    suspend fun getBooksWithLanguages(languages: List<String>): Response<BookResponse>
+    suspend fun getAllBooks(page: Int): Response<BookResponse>
+    suspend fun getBooksWithSearch(page: Int, search: String): Response<BookResponse>
+    suspend fun getBooksWithLanguages(page: Int, languages: List<String>): Response<BookResponse>
 }
