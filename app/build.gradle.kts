@@ -75,4 +75,8 @@ dependencies {
     //Layout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
+
+    // Picasso
+    implementation ("com.squareup.picasso:picasso:2.71828")
+
 }
