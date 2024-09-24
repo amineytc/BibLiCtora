@@ -1,4 +1,4 @@
-package com.amineaytac.biblictora.ui.discover
+package com.amineaytac.biblictora.ui.discover.customview
 
 import android.content.Context
 import android.graphics.Canvas
@@ -11,9 +11,7 @@ import androidx.core.content.ContextCompat
 import com.amineaytac.biblictora.R
 
 class HeartView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     private val sweepAngle = 225f
@@ -32,14 +30,11 @@ class HeartView @JvmOverloads constructor(
 
     init {
         context.theme.obtainStyledAttributes(
-            attrs,
-            R.styleable.DrawHeart,
-            0, 0
+            attrs, R.styleable.DrawHeart, 0, 0
         ).apply {
             try {
                 startColor = getColor(
-                    R.styleable.DrawHeart_startColor,
-                    ContextCompat.getColor(context, R.color.white)
+                    R.styleable.DrawHeart_startColor, ContextCompat.getColor(context, R.color.white)
                 )
                 endColor = getColor(
                     R.styleable.DrawHeart_endColor,

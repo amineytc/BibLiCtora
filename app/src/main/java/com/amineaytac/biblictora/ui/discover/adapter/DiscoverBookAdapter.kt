@@ -1,4 +1,4 @@
-package com.amineaytac.biblictora.ui.discover
+package com.amineaytac.biblictora.ui.discover.adapter
 
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.amineaytac.biblictora.R
 import com.amineaytac.biblictora.core.data.model.Book
@@ -15,17 +17,16 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 
 class DiscoverBookAdapter(
-
-    private val books: List<Book>,
-    private val resources: Resources,
-    private val onBookClickListener: (position: Int) -> Unit
-
-) : RecyclerView.Adapter<DiscoverBookAdapter.ViewHolder>() {
+    private val resources: Resources, private val onBookClickListener: (position: Int) -> Unit
+) : PagingDataAdapter<Book, DiscoverBookAdapter.ViewHolder>(
+    COMPARATOR
+) {
 
     inner class ViewHolder(private val binding: ItemDiscoverBookBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Book, position: Int) = with(binding) {
 
+            setIsRecyclable(false)
             tvName.text = item.title
             tvWriter.text = item.authors
 
@@ -38,8 +39,7 @@ class DiscoverBookAdapter(
                 override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
                     pictureView.setBitmap(
                         BitmapFactory.decodeResource(
-                            resources,
-                            R.drawable.ic_failure_book_picture
+                            resources, R.drawable.ic_failure_book_picture
                         )
                     )
                     progressBarPicture.gone()
@@ -56,19 +56,31 @@ class DiscoverBookAdapter(
         }
     }
 
+    companion object {
+        private val COMPARATOR = object : DiffUtil.ItemCallback<Book>() {
+            override fun areItemsTheSame(
+                oldItem: Book, newItem: Book
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(
+                oldItem: Book, newItem: Book
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemDiscoverBookBinding.inflate(LayoutInflater.from(parent.context))
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = books[position]
-        item.let {
+        val item = getItem(position)
+        item?.let {
             holder.bind(item, position)
         }
-    }
-
-    override fun getItemCount(): Int {
-        return books.size
     }
 }

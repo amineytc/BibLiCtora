@@ -1,14 +1,10 @@
 package com.amineaytac.biblictora.ui.discover
 
+import androidx.paging.PagingData
 import com.amineaytac.biblictora.core.data.model.Book
 
 data class BookListScreenUiState(
-    val books: List<Book> = emptyList(),
-    val isLoading: Boolean = false,
+    val books: PagingData<Book> = PagingData.empty(),
     val isError: Boolean = false,
     val errorMessage: String? = ""
-) {
-    companion object {
-        fun initial() = BookListScreenUiState(isLoading = true)
-    }
-}
+)

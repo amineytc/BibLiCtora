@@ -21,6 +21,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="CustomFloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/moselle_green</item>
+        <item name="tint">@color/white</item>
+    </style>
+
     <style name="BottomNavigationViewStyle" parent="Widget.Design.NavigationView">
         <item name="android:fontFamily">@font/lusitana_regular</item>
     </style>

@@ -1,6 +1,6 @@
 package com.amineaytac.biblictora.core.domain
 
-import com.amineaytac.biblictora.core.common.ResponseState
+import androidx.paging.PagingData
 import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.core.data.repo.BookRepository
 import kotlinx.coroutines.flow.Flow
@@ -8,9 +8,8 @@ import javax.inject.Inject
 
 class GetBooksWithSearchUseCase @Inject constructor(private val bookRepository: BookRepository) {
     suspend operator fun invoke(
-        search: String,
-        languages: List<String>
-    ): Flow<ResponseState<List<Book>>> {
-        return bookRepository.getBooksWithSearch(search, languages)
+        search: String, languages: List<String>
+    ): Flow<PagingData<Book>> {
+        return bookRepository.getBooksWithSearch(search, languages, "getBooksWithSearch")
     }
 }

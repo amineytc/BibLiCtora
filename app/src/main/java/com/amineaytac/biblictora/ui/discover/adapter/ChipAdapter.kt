@@ -1,4 +1,4 @@
-package com.amineaytac.biblictora.ui.discover
+package com.amineaytac.biblictora.ui.discover.adapter
 
 import android.content.Context
 import android.view.Gravity
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amineaytac.biblictora.R
 import com.amineaytac.biblictora.databinding.ItemChipBinding
+import com.amineaytac.biblictora.ui.discover.LanguageChipBox
 import com.google.android.material.chip.ChipDrawable
 
 class ChipAdapter(
