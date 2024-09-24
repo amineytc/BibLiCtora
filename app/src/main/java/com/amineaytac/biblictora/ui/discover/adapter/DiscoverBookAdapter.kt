@@ -1,4 +1,4 @@
-package com.amineaytac.biblictora.ui.discover
+package com.amineaytac.biblictora.ui.discover.adapter
 
 import android.content.res.Resources
 import android.graphics.Bitmap

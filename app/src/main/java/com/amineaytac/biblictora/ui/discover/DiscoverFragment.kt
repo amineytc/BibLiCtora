@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amineaytac.biblictora.R
 import com.amineaytac.biblictora.databinding.FragmentDiscoverBinding
+import com.amineaytac.biblictora.ui.discover.adapter.ChipAdapter
+import com.amineaytac.biblictora.ui.discover.adapter.DiscoverBookAdapter
 import com.amineaytac.biblictora.ui.discover.adapter.LoaderAdapter
 import com.amineaytac.biblictora.util.gone
 import com.amineaytac.biblictora.util.visible
