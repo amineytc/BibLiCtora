@@ -104,12 +104,14 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
                         binding.rvBook.gone()
                         binding.ivFailurePicture.visible()
                         binding.tvFailureText.visible()
+                        binding.floatingButton.gone()
                         binding.ivFailurePicture.setBackgroundResource(R.drawable.ic_failure_search)
                         binding.tvFailureText.text = getString(R.string.try_searching_again)
                     } else {
                         binding.rvBook.visible()
                         binding.ivFailurePicture.gone()
                         binding.tvFailureText.gone()
+                        binding.floatingButton.visible()
                     }
                 }
             }
@@ -118,9 +120,13 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
     private fun bindBackDrop() = with(binding) {
 
-        binding.rvBook.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        floatingButton.setOnClickListener {
+            rvBook.scrollToPosition(0)
+        }
+
+        rvBook.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                binding.swipeRefresh.isEnabled = !recyclerView.canScrollVertically(-1)
+                swipeRefresh.isEnabled = !recyclerView.canScrollVertically(-1)
             }
         })
 
@@ -168,6 +174,7 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         ivFailurePicture.gone()
         tvFailureText.gone()
         rvBook.gone()
+        floatingButton.gone()
     }
 
     private fun chipClickStatesToLanguageList(): List<String> {
