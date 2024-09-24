@@ -1,53 +1,38 @@
 package com.amineaytac.biblictora.core.data.repo
 
-import com.amineaytac.biblictora.core.common.ResponseState
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.amineaytac.biblictora.core.data.model.Book
+import com.amineaytac.biblictora.core.network.source.paging.PagingSource
 import com.amineaytac.biblictora.core.network.source.rest.RestDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class BookRepositoryImpl @Inject constructor(private val restDataSource: RestDataSource) :
     BookRepository {
-    override suspend fun getAllBooks(): Flow<ResponseState<List<Book>>> {
-        return flow {
-            emit(ResponseState.Loading)
-            val response = restDataSource.getAllBooks()
-            emit(ResponseState.Success(response.mapTo { it.toBookList() }))
-        }.catch {
-            emit(ResponseState.Error(it.message.orEmpty()))
-        }
+    override suspend fun getAllBooks(funcKey: String): Flow<PagingData<Book>> {
+        val pagingSource = PagingSource(restDataSource, funcKey)
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { pagingSource }).flow
     }
 
     override suspend fun getBooksWithSearch(
-        search: String,
-        languages: List<String>
-    ): Flow<ResponseState<List<Book>>> {
-        return flow {
-            emit(ResponseState.Loading)
-            val response = restDataSource.getBooksWithSearch(search)
-            if (languages.isEmpty()) {
-                emit(ResponseState.Success(response.mapTo { it.toBookList() }))
-            } else {
-                emit(ResponseState.Success(response.mapTo {
-                    it.toBookListWithLanguagesFilter(
-                        languages
-                    )
-                }))
-            }
-        }.catch {
-            emit(ResponseState.Error(it.message.orEmpty()))
-        }
+        search: String, languages: List<String>, funcKey: String
+    ): Flow<PagingData<Book>> {
+        val pagingSource = PagingSource(restDataSource, funcKey, search, languages)
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { pagingSource }).flow
     }
 
-    override suspend fun getBooksWithLanguages(languages: List<String>): Flow<ResponseState<List<Book>>> {
-        return flow {
-            emit(ResponseState.Loading)
-            val response = restDataSource.getBooksWithLanguages(languages)
-            emit(ResponseState.Success(response.mapTo { it.toBookList() }))
-        }.catch {
-            emit(ResponseState.Error(it.message.orEmpty()))
-        }
+    override suspend fun getBooksWithLanguages(
+        languages: List<String>, funcKey: String
+    ): Flow<PagingData<Book>> {
+        val pagingSource = PagingSource(restDataSource, funcKey, languages = languages)
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { pagingSource }).flow
     }
 }
