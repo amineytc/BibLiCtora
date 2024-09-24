@@ -95,25 +95,25 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
         bookAdapter.addLoadStateListener {
             it.refresh.let { loadState ->
-                binding.progressBar.isVisible = loadState is LoadState.Loading
-                binding.rvBook.isVisible = loadState is LoadState.NotLoading
-                binding.ivFailurePicture.gone()
-                binding.tvFailureText.gone()
-                binding.ivFailurePicture.setBackgroundResource(0)
+                progressBar.isVisible = loadState is LoadState.Loading
+                rvBook.isVisible = loadState is LoadState.NotLoading
+                ivFailurePicture.gone()
+                tvFailureText.gone()
+                ivFailurePicture.setBackgroundResource(0)
 
                 if (loadState is LoadState.NotLoading) {
                     if (bookAdapter.itemCount == 0) {
-                        binding.rvBook.gone()
-                        binding.ivFailurePicture.visible()
-                        binding.tvFailureText.visible()
-                        binding.floatingButton.gone()
-                        binding.ivFailurePicture.setBackgroundResource(R.drawable.ic_failure_search)
-                        binding.tvFailureText.text = getString(R.string.try_searching_again)
+                        rvBook.gone()
+                        ivFailurePicture.visible()
+                        tvFailureText.visible()
+                        floatingButton.gone()
+                        ivFailurePicture.setBackgroundResource(R.drawable.ic_failure_search)
+                        tvFailureText.text = getString(R.string.try_searching_again)
                     } else {
-                        binding.rvBook.visible()
-                        binding.ivFailurePicture.gone()
-                        binding.tvFailureText.gone()
-                        binding.floatingButton.visible()
+                        rvBook.visible()
+                        ivFailurePicture.gone()
+                        tvFailureText.gone()
+                        floatingButton.visible()
                     }
                 }
             }
@@ -245,16 +245,16 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         viewModel.getAllBooks()
     }
 
-    private fun observeUi() {
+    private fun observeUi() = with(binding) {
         viewModel.bookScreenUiState.observe(viewLifecycleOwner) {
             when {
                 it.isError -> {
-                    binding.progressBar.gone()
-                    binding.rvBook.gone()
-                    binding.ivFailurePicture.visible()
-                    binding.tvFailureText.visible()
-                    binding.ivFailurePicture.setBackgroundResource(R.drawable.ic_failure_connection)
-                    binding.tvFailureText.text = it.errorMessage
+                    progressBar.gone()
+                    rvBook.gone()
+                    ivFailurePicture.visible()
+                    tvFailureText.visible()
+                    ivFailurePicture.setBackgroundResource(R.drawable.ic_failure_connection)
+                    tvFailureText.text = it.errorMessage
                 }
 
                 else -> {
