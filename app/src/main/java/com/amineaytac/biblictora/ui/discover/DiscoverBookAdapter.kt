@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amineaytac.biblictora.R
 import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.databinding.ItemDiscoverBookBinding
+import com.amineaytac.biblictora.util.gone
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 
@@ -31,15 +32,17 @@ class DiscoverBookAdapter(
             val imageTarget = object : Target {
                 override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                     pictureView.setBitmap(bitmap)
+                    progressBarPicture.gone()
                 }
 
                 override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
                     pictureView.setBitmap(
                         BitmapFactory.decodeResource(
                             resources,
-                            R.drawable.ic_image_load
+                            R.drawable.ic_failure_book_picture
                         )
                     )
+                    progressBarPicture.gone()
                 }
 
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}

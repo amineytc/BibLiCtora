@@ -26,17 +26,17 @@
             android:layout_height="@dimen/_110sdp"
             android:layout_gravity="top|end">
 
+            <com.amineaytac.biblictora.ui.discover.BookPictureView
+                android:id="@+id/pictureView"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_110sdp" />
+
             <ProgressBar
                 android:id="@+id/progressBarPicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:indeterminateTint="@color/moselle_green" />
-
-            <com.amineaytac.biblictora.ui.discover.BookPictureView
-                android:id="@+id/pictureView"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_110sdp" />
         </FrameLayout>
 
 
