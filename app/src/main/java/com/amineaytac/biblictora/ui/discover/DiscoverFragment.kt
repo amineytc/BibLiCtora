@@ -38,12 +38,6 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         callInitialViewModelFunctions()
         observeUi()
         bindBackDrop()
-
-        binding.rvBook.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                binding.swipeRefresh.isEnabled = !recyclerView.canScrollVertically(-1)
-            }
-        })
     }
 
     private fun bindChipAdapter() = with(binding) {
@@ -82,6 +76,12 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
     private fun bindBackDrop() = with(binding) {
 
+        binding.rvBook.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                binding.swipeRefresh.isEnabled = !recyclerView.canScrollVertically(-1)
+            }
+        })
+
         bindChipAdapter()
         bindSearchView()
         isChipGroupVisible = viewModel.getChipGroupVisibility()
@@ -94,8 +94,6 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         }
 
         sheetBehavior = BottomSheetBehavior.from(linearLayout)
-
-        val sheetBehavior = BottomSheetBehavior.from(linearLayout)
         sheetBehavior.isFitToContents = false
         sheetBehavior.isHideable = false
         sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -107,11 +105,12 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
         btnShowResults.setOnClickListener {
             val languages = chipClickStatesToLanguageList()
             val searchText = viewModel.getSearchText()
-            if (searchText.isNotEmpty()) {
-                val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
-                        as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
 
+            val inputMethodManager =
+                context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+
+            if (searchText.isNotEmpty()) {
                 viewModel.getBooksWithSearch(searchText, languages)
             } else if (languages.isNotEmpty() && searchText.isEmpty()) {
                 viewModel.getBooksWithLanguages(languages)
