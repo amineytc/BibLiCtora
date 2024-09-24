@@ -6,13 +6,15 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amineaytac.biblictora.R
-import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.databinding.FragmentDiscoverBinding
+import com.amineaytac.biblictora.ui.discover.adapter.LoaderAdapter
 import com.amineaytac.biblictora.util.gone
 import com.amineaytac.biblictora.util.visible
 import com.amineaytc.biblictora.util.viewBinding
@@ -26,7 +28,6 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
     private val viewModel: DiscoverViewModel by viewModels()
     private var isChipGroupVisible = false
     private val chips = mutableListOf<LanguageChipBox>()
-    private var books = emptyList<Book>()
     private var chipClickStates = Array(12) { false }
     private lateinit var chipAdapter: ChipAdapter
     private lateinit var bookAdapter: DiscoverBookAdapter
@@ -35,6 +36,8 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setComponentVisibility()
+        bindBookAdapter()
         callInitialViewModelFunctions()
         observeUi()
         bindBackDrop()
@@ -67,11 +70,50 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
     }
 
     private fun bindBookAdapter() = with(binding) {
-        bookAdapter =
-            DiscoverBookAdapter(books, resources) { }
 
+        bookAdapter = DiscoverBookAdapter(resources) {}
         rvBook.layoutManager = GridLayoutManager(requireContext(), 2)
-        rvBook.adapter = bookAdapter
+        rvBook.setHasFixedSize(true)
+        rvBook.adapter = bookAdapter.withLoadStateHeaderAndFooter(
+            header = LoaderAdapter(), footer = LoaderAdapter()
+        )
+
+        val gridLayoutManager = rvBook.layoutManager as GridLayoutManager
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                val itemCount = gridLayoutManager.itemCount
+
+                return if (position == itemCount - 1) {
+                    gridLayoutManager.spanCount
+                } else {
+                    1
+                }
+            }
+        }
+
+        bookAdapter.addLoadStateListener {
+            it.refresh.let { loadState ->
+                binding.progressBar.isVisible = loadState is LoadState.Loading
+                binding.rvBook.isVisible = loadState is LoadState.NotLoading
+                binding.ivFailurePicture.gone()
+                binding.tvFailureText.gone()
+                binding.ivFailurePicture.setBackgroundResource(0)
+
+                if (loadState is LoadState.NotLoading) {
+                    if (bookAdapter.itemCount == 0) {
+                        binding.rvBook.gone()
+                        binding.ivFailurePicture.visible()
+                        binding.tvFailureText.visible()
+                        binding.ivFailurePicture.setBackgroundResource(R.drawable.ic_failure_search)
+                        binding.tvFailureText.text = getString(R.string.try_searching_again)
+                    } else {
+                        binding.rvBook.visible()
+                        binding.ivFailurePicture.gone()
+                        binding.tvFailureText.gone()
+                    }
+                }
+            }
+        }
     }
 
     private fun bindBackDrop() = with(binding) {
@@ -109,6 +151,7 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             val inputMethodManager =
                 context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+            setComponentVisibility()
 
             if (searchText.isNotEmpty()) {
                 viewModel.getBooksWithSearch(searchText, languages)
@@ -119,6 +162,12 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             }
             toggleFilters(sheetBehavior)
         }
+    }
+
+    private fun setComponentVisibility() = with(binding) {
+        ivFailurePicture.gone()
+        tvFailureText.gone()
+        rvBook.gone()
     }
 
     private fun chipClickStatesToLanguageList(): List<String> {
@@ -153,9 +202,10 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
                     toggleFilters(sheetBehavior)
-                    val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE)
-                            as InputMethodManager
+                    val inputMethodManager =
+                        context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+                    setComponentVisibility()
                     if (it.isNotEmpty()) {
                         viewModel.getBooksWithSearch(it, chipClickStatesToLanguageList())
                     } else {
@@ -198,30 +248,9 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
                     binding.tvFailureText.text = it.errorMessage
                 }
 
-                it.isLoading -> {
-                    binding.progressBar.visible()
-                    binding.rvBook.gone()
-                    binding.ivFailurePicture.gone()
-                    binding.tvFailureText.gone()
-                    binding.ivFailurePicture.setBackgroundResource(0)
-                }
-
                 else -> {
-                    books = it.books
-                    binding.progressBar.gone()
-
-                    if (books.isNullOrEmpty()) {
-                        binding.rvBook.gone()
-                        binding.ivFailurePicture.visible()
-                        binding.tvFailureText.visible()
-                        binding.ivFailurePicture.setBackgroundResource(R.drawable.ic_failure_search)
-                        binding.tvFailureText.text = getString(R.string.try_searching_again)
-                    } else {
-                        binding.rvBook.visible()
-                        binding.ivFailurePicture.gone()
-                        binding.tvFailureText.gone()
-                        bindBookAdapter()
-                    }
+                    bindBookAdapter()
+                    bookAdapter.submitData(lifecycle, it.books)
                 }
             }
         }
