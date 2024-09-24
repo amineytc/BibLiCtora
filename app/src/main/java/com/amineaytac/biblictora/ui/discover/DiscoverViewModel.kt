@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amineaytac.biblictora.core.common.ResponseState
 import com.amineaytac.biblictora.core.domain.GetAllBooksUseCase
 import com.amineaytac.biblictora.core.domain.GetBooksWithLanguagesUseCase
 import com.amineaytac.biblictora.core.domain.GetBooksWithSearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class DiscoverViewModel @Inject constructor(
     private val getBooksWithLanguagesUseCase: GetBooksWithLanguagesUseCase
 ) : ViewModel() {
 
-    private val _bookScreenUiState = MutableLiveData(BookListScreenUiState.initial())
+    private val _bookScreenUiState = MutableLiveData<BookListScreenUiState>()
     val bookScreenUiState: LiveData<BookListScreenUiState> get() = _bookScreenUiState
 
     private var chipClickStates = Array(12) { false }
@@ -28,72 +28,42 @@ class DiscoverViewModel @Inject constructor(
 
     fun getAllBooks() {
         viewModelScope.launch {
-            getAllBooksUseCase().collect { responseState ->
-                when (responseState) {
-                    is ResponseState.Error -> {
-                        _bookScreenUiState.postValue(
-                            BookListScreenUiState(
-                                isError = true, errorMessage = responseState.message
-                            )
-                        )
-                    }
-
-                    is ResponseState.Loading -> {
-                        _bookScreenUiState.postValue(BookListScreenUiState(isLoading = true))
-                    }
-
-                    is ResponseState.Success -> {
-                        _bookScreenUiState.postValue(BookListScreenUiState(responseState.data))
-                    }
-                }
+            getAllBooksUseCase().catch {
+                _bookScreenUiState.postValue(
+                    BookListScreenUiState(
+                        isError = true, errorMessage = it.message
+                    )
+                )
+            }.collect { data ->
+                _bookScreenUiState.postValue(BookListScreenUiState(data))
             }
         }
     }
 
     fun getBooksWithSearch(search: String, languages: List<String>) {
         viewModelScope.launch {
-            getBooksWithSearchUseCase(search, languages).collect { responseState ->
-                when (responseState) {
-                    is ResponseState.Error -> {
-                        _bookScreenUiState.postValue(
-                            BookListScreenUiState(
-                                isError = true, errorMessage = responseState.message
-                            )
-                        )
-                    }
-
-                    is ResponseState.Loading -> {
-                        _bookScreenUiState.postValue(BookListScreenUiState(isLoading = true))
-                    }
-
-                    is ResponseState.Success -> {
-                        _bookScreenUiState.postValue(BookListScreenUiState(responseState.data))
-                    }
-                }
+            getBooksWithSearchUseCase(search, languages).catch {
+                _bookScreenUiState.postValue(
+                    BookListScreenUiState(
+                        isError = true, errorMessage = it.message
+                    )
+                )
+            }.collect { data ->
+                _bookScreenUiState.postValue(BookListScreenUiState(data))
             }
         }
     }
 
     fun getBooksWithLanguages(languages: List<String>) {
         viewModelScope.launch {
-            getBooksWithLanguagesUseCase(languages).collect { responseState ->
-                when (responseState) {
-                    is ResponseState.Error -> {
-                        _bookScreenUiState.postValue(
-                            BookListScreenUiState(
-                                isError = true, errorMessage = responseState.message
-                            )
-                        )
-                    }
-
-                    is ResponseState.Loading -> {
-                        _bookScreenUiState.postValue(BookListScreenUiState(isLoading = true))
-                    }
-
-                    is ResponseState.Success -> {
-                        _bookScreenUiState.postValue(BookListScreenUiState(responseState.data))
-                    }
-                }
+            getBooksWithLanguagesUseCase(languages).catch {
+                _bookScreenUiState.postValue(
+                    BookListScreenUiState(
+                        isError = true, errorMessage = it.message
+                    )
+                )
+            }.collect { data ->
+                _bookScreenUiState.postValue(BookListScreenUiState(data))
             }
         }
     }
