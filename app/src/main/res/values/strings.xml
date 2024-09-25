@@ -48,4 +48,11 @@
         <item>@drawable/ic_flag_china</item>
         <item>@drawable/ic_flag_portugal</item>
     </integer-array>
+
+    <string name="ic_biblictora">Icon Biblictora App</string>
+    <string name="ic_notification">Icon Notification</string>
+
+    <string name="time_picker_title">Choose a time for notification.</string>
+    <string name="no_notification">There are no configured notifications.</string>
+
 </resources>
