@@ -18,15 +18,31 @@
             android:layout_width="@dimen/_160sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_gravity="center"
-            android:background="@drawable/ic_biblictora" />
+            android:background="@drawable/ic_biblictora"
+            android:contentDescription="@string/ic_biblictora"
+            tools:ignore="ContentDescription,HardcodedText,ImageContrastCheck" />
 
         <ImageView
+            android:id="@+id/ic_notification"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_24sdp"
-            android:background="@drawable/ic_alarm" />
+            android:layout_marginEnd="@dimen/_40sdp"
+            android:background="@drawable/ic_alarm"
+            android:contentDescription="@string/ic_notification"
+            tools:ignore="ContentDescription,HardcodedText,ImageContrastCheck" />
+
+        <Switch
+            android:id="@+id/switch_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/_3sdp"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:trackTint="@color/oyster_island"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
     </FrameLayout>
 
     <com.google.android.material.tabs.TabLayout

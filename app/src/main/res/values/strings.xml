@@ -48,4 +48,8 @@
         <item>@drawable/ic_flag_china</item>
         <item>@drawable/ic_flag_portugal</item>
     </integer-array>
+
+    <string name="ic_biblictora">Icon Biblictora App</string>
+    <string name="ic_notification">Icon Notification</string>
+
 </resources>
