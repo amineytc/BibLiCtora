@@ -81,4 +81,7 @@ dependencies {
 
     //Paging
     implementation("androidx.paging:paging-runtime-ktx:3.3.2")
+
+    //TimePicker
+    implementation("com.akexorcist:snap-time-picker:1.0.3")
 }
