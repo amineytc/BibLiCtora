@@ -73,7 +73,9 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
     private fun bindBookAdapter() = with(binding) {
 
-        bookAdapter = DiscoverBookAdapter(resources) {}
+        bookAdapter = DiscoverBookAdapter(resources) {
+            findNavController().navigate(HomeFragmentDirections.navigateToBookDetailFragment(it))
+        }
         rvBook.layoutManager = GridLayoutManager(requireContext(), 2)
         rvBook.setHasFixedSize(true)
         rvBook.adapter = bookAdapter.withLoadStateHeaderAndFooter(
