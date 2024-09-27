@@ -72,7 +72,7 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
-    fun getBooksWithSearch(search: String, languages: List<String>) {
+    fun getBooksWithSearch() {
         viewModelScope.launch {
             searchBookFlow.catch {
                 _bookScreenUiState.postValue(
@@ -86,7 +86,7 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
-    fun getBooksWithLanguages(languages: List<String>) {
+    fun getBooksWithLanguages() {
         viewModelScope.launch {
             languagesBookFlow.catch {
                 _bookScreenUiState.postValue(

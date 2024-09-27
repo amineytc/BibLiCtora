@@ -169,10 +169,10 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
             if (searchText.isNotEmpty()) {
                 viewModel.getBooksWithSearchFlow(searchText, languages)
-                viewModel.getBooksWithSearch(searchText, languages)
+                viewModel.getBooksWithSearch()
             } else if (languages.isNotEmpty() && searchText.isEmpty()) {
                 viewModel.getBooksWithLanguagesFlow(languages)
-                viewModel.getBooksWithLanguages(languages)
+                viewModel.getBooksWithLanguages()
             } else {
                 viewModel.getAllBooks()
             }
@@ -224,7 +224,8 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
                     inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
                     setComponentVisibility()
                     if (it.isNotEmpty()) {
-                        viewModel.getBooksWithSearch(it, chipClickStatesToLanguageList())
+                        viewModel.getBooksWithSearchFlow(it, chipClickStatesToLanguageList())
+                        viewModel.getBooksWithSearch()
                     } else {
                         viewModel.getAllBooks()
                     }
