@@ -9,6 +9,7 @@ import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import com.amineaytac.biblictora.databinding.FragmentDiscoverBinding
 import com.amineaytac.biblictora.ui.discover.adapter.ChipAdapter
 import com.amineaytac.biblictora.ui.discover.adapter.DiscoverBookAdapter
 import com.amineaytac.biblictora.ui.discover.adapter.LoaderAdapter
+import com.amineaytac.biblictora.ui.home.HomeFragmentDirections
 import com.amineaytac.biblictora.util.gone
 import com.amineaytac.biblictora.util.visible
 import com.amineaytc.biblictora.util.viewBinding
@@ -38,9 +40,11 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (viewModel.isFirstRest) {
+            callInitialViewModelFunctions()
+        }
         setComponentVisibility()
         bindBookAdapter()
-        callInitialViewModelFunctions()
         observeUi()
         bindBackDrop()
     }
@@ -164,8 +168,10 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             setComponentVisibility()
 
             if (searchText.isNotEmpty()) {
+                viewModel.getBooksWithSearchFlow(searchText, languages)
                 viewModel.getBooksWithSearch(searchText, languages)
             } else if (languages.isNotEmpty() && searchText.isEmpty()) {
+                viewModel.getBooksWithLanguagesFlow(languages)
                 viewModel.getBooksWithLanguages(languages)
             } else {
                 viewModel.getAllBooks()

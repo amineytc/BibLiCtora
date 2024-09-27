@@ -4,10 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.core.domain.GetAllBooksUseCase
 import com.amineaytac.biblictora.core.domain.GetBooksWithLanguagesUseCase
 import com.amineaytac.biblictora.core.domain.GetBooksWithSearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,9 +30,37 @@ class DiscoverViewModel @Inject constructor(
     private var searchText = ""
     private var isChipGroupVisible = false
 
-    fun getAllBooks() {
+    private lateinit var allBooksFlow: Flow<PagingData<Book>>
+    private lateinit var searchBookFlow: Flow<PagingData<Book>>
+    private lateinit var languagesBookFlow: Flow<PagingData<Book>>
+    var isFirstRest = true
+
+    init {
+        getAllBooksFlow()
+    }
+
+    private fun getAllBooksFlow() {
         viewModelScope.launch {
-            getAllBooksUseCase().catch {
+            allBooksFlow = getAllBooksUseCase().cachedIn(this)
+        }
+    }
+
+    fun getBooksWithLanguagesFlow(languages: List<String>) {
+        viewModelScope.launch {
+            languagesBookFlow = getBooksWithLanguagesUseCase(languages).cachedIn(this)
+        }
+    }
+
+    fun getBooksWithSearchFlow(search: String, languages: List<String>) {
+        viewModelScope.launch {
+            searchBookFlow = getBooksWithSearchUseCase(search, languages).cachedIn(this)
+        }
+    }
+
+    fun getAllBooks() {
+        isFirstRest = false
+        viewModelScope.launch {
+            allBooksFlow.catch {
                 _bookScreenUiState.postValue(
                     BookListScreenUiState(
                         isError = true, errorMessage = it.message
@@ -42,7 +74,7 @@ class DiscoverViewModel @Inject constructor(
 
     fun getBooksWithSearch(search: String, languages: List<String>) {
         viewModelScope.launch {
-            getBooksWithSearchUseCase(search, languages).catch {
+            searchBookFlow.catch {
                 _bookScreenUiState.postValue(
                     BookListScreenUiState(
                         isError = true, errorMessage = it.message
@@ -56,7 +88,7 @@ class DiscoverViewModel @Inject constructor(
 
     fun getBooksWithLanguages(languages: List<String>) {
         viewModelScope.launch {
-            getBooksWithLanguagesUseCase(languages).catch {
+            languagesBookFlow.catch {
                 _bookScreenUiState.postValue(
                     BookListScreenUiState(
                         isError = true, errorMessage = it.message
