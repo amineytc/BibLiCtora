@@ -298,6 +298,15 @@
                         android:text="@string/anonymous"
                         android:textColor="@color/highlight" />
 
+                    <com.amineaytac.biblictora.ui.discover.customview.HeartView
+                        android:id="@+id/heartView"
+                        android:layout_width="@dimen/_24sdp"
+                        android:layout_height="@dimen/_24sdp"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:layout_marginEnd="@dimen/_14sdp"
+                        android:contentDescription="@string/heart_view" />
+
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
 
