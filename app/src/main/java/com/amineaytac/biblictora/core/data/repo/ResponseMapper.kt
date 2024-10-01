@@ -26,7 +26,7 @@ fun RestBooksResponse.toBookList(): List<Book> {
             book?.authors.toAuthorString(),
             bookshelves,
             book?.languages.toLanguageString(),
-            book?.title.orEmpty(),
+            emptyStringToAnonymous(book?.title),
             book?.formats?.toReadFormats() ?: ReadFormats("", ""),
             book?.formats?.imagejpeg.toString()
         )
@@ -56,11 +56,15 @@ fun RestBooksResponse.toBookListWithLanguagesFilter(languages: List<String>): Li
             book?.authors.toAuthorString(),
             bookshelves,
             book?.languages.toLanguageString(),
-            book?.title.orEmpty(),
+            emptyStringToAnonymous(book?.title),
             book?.formats?.toReadFormats() ?: ReadFormats("", ""),
             book?.formats?.imagejpeg.toString()
         )
     }
+}
+
+fun emptyStringToAnonymous(str: String?): String {
+    return if (str.isNullOrEmpty()) "Anonymous" else str
 }
 
 fun AuthorsResponse.toAuthorString(): String {
@@ -79,7 +83,7 @@ fun AuthorsResponse.toAuthorString(): String {
             }
         }
     }
-    return authors
+    return emptyStringToAnonymous(authors)
 }
 
 fun LanguageResponse.toLanguageString(): String {
@@ -90,7 +94,7 @@ fun LanguageResponse.toLanguageString(): String {
             language += ", "
         }
     }
-    return language
+    return emptyStringToAnonymous(language)
 }
 
 fun Formats.toReadFormats(): ReadFormats {
