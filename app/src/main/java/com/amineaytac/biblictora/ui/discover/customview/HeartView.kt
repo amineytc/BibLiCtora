@@ -15,7 +15,12 @@ class HeartView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val sweepAngle = 225f
-    private var isClicked = false
+    var isClicked = false
+
+    private var onFavoriteClickListener: ((Boolean) -> Unit)? = null
+    fun setOnFavoriteClickListener(listener: (Boolean) -> Unit) {
+        onFavoriteClickListener = listener
+    }
 
     private val heartPaint = Paint().apply {
         color = ContextCompat.getColor(context, R.color.white)
@@ -38,7 +43,7 @@ class HeartView @JvmOverloads constructor(
                 )
                 endColor = getColor(
                     R.styleable.DrawHeart_endColor,
-                    ContextCompat.getColor(context, R.color.moselle_green)
+                    ContextCompat.getColor(context, R.color.black)
                 )
             } finally {
                 recycle()
@@ -51,8 +56,14 @@ class HeartView @JvmOverloads constructor(
         if (super.performClick()) return true
         isClicked = !isClicked
         heartPaint.color = if (isClicked) endColor else startColor
+        onFavoriteClickListener?.invoke(isClicked)
         invalidate()
         return true
+    }
+
+    fun changeColor() {
+        heartPaint.color = if (isClicked) endColor else startColor
+        invalidate()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
