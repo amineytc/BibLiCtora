@@ -1,5 +1,6 @@
 package com.amineaytac.biblictora.core.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -18,4 +19,7 @@ interface FavoriteDao {
 
     @Query("SELECT * FROM favorite_table")
     fun getFavoriteItems(): Flow<List<FavoriteEntity>>
+
+    @Query("SELECT EXISTS(SELECT 1 FROM favorite_table WHERE id = :itemId LIMIT 1)")
+    fun isItemFavorited(itemId: String): LiveData<Boolean>
 }
