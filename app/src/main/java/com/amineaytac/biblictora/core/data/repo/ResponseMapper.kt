@@ -2,6 +2,7 @@ package com.amineaytac.biblictora.core.data.repo
 
 import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.core.data.model.ReadFormats
+import com.amineaytac.biblictora.core.database.FavoriteEntity
 import com.amineaytac.biblictora.core.network.dto.Author
 import com.amineaytac.biblictora.core.network.dto.BookResponse
 import com.amineaytac.biblictora.core.network.dto.Formats
@@ -100,5 +101,29 @@ fun LanguageResponse.toLanguageString(): String {
 fun Formats.toReadFormats(): ReadFormats {
     return ReadFormats(
         this.texthtml.toString(), this.texthtmlCharsetutf8.toString()
+    )
+}
+
+fun FavoriteEntity.toBook(): Book {
+    return Book(
+        id = this.id,
+        authors = this.authors,
+        bookshelves = this.bookshelves,
+        languages = this.languages,
+        title = this.title,
+        formats = this.formats,
+        image = this.image
+    )
+}
+
+fun Book.toFavoriteItemEntity(): FavoriteEntity {
+    return FavoriteEntity(
+        id = id,
+        authors = authors,
+        bookshelves = bookshelves,
+        languages = languages,
+        title = title,
+        formats = formats,
+        image = image
     )
 }

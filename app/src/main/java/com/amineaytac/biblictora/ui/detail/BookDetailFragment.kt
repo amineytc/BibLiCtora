@@ -6,21 +6,27 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.palette.graphics.Palette
 import com.amineaytac.biblictora.R
+import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.databinding.FragmentBookDetailBinding
 import com.amineaytac.biblictora.util.gone
 import com.amineaytc.biblictora.util.viewBinding
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.sqrt
 
+@AndroidEntryPoint
 class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
 
     private val binding by viewBinding(FragmentBookDetailBinding::bind)
+    private val viewModel: BookDetailViewModel by viewModels()
+    private var isFavorited = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,7 +47,7 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
     private fun bindUI() = with(binding) {
         if (arguments != null) {
             val book = BookDetailFragmentArgs.fromBundle(requireArguments()).book
-
+            observeIsItemFavorited(book)
             if (book.image.isNotEmpty()) {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
@@ -152,5 +158,33 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
         return sqrt(
             ((whiteRed - red) * (whiteRed - red) + (whiteGreen - green) * (whiteGreen - green) + (whiteBlue - blue) * (whiteBlue - blue)).toDouble()
         )
+    }
+
+    private fun observeIsItemFavorited(book: Book) {
+        viewModel.isItemFavorited(book.id.toString()).observe(viewLifecycleOwner) {
+            isFavorited = it
+            bindHeartView(book)
+        }
+    }
+
+    private fun onFavoriteClickListener(book: Book, isFavorited: Boolean) {
+        if (isFavorited) {
+            viewModel.addFavoriteItem(book)
+        } else {
+            viewModel.deleteFavoriteItem(book)
+        }
+        observeIsItemFavorited(book)
+    }
+
+    private fun bindHeartView(book: Book) = with(binding) {
+        heartView.isClicked = isFavorited
+        heartView.changeColor()
+        heartView.setOnFavoriteClickListener {
+            if (isFavorited) {
+                onFavoriteClickListener(book, false)
+            } else {
+                onFavoriteClickListener(book, true)
+            }
+        }
     }
 }
