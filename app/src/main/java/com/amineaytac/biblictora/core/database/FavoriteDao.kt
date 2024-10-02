@@ -1,4 +1,4 @@
-package com.amineaytac.biblictora.core.database.di
+package com.amineaytac.biblictora.core.database
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -17,5 +17,5 @@ interface FavoriteDao {
     suspend fun deleteFavoriteItem(favoriteEntity: FavoriteEntity)
 
     @Query("SELECT * FROM favorite_table")
-    fun getFavoriteItems() : Flow<List<FavoriteEntity>>
+    fun getFavoriteItems(): Flow<List<FavoriteEntity>>
 }
