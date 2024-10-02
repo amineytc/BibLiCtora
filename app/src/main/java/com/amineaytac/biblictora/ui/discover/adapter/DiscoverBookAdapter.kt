@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 
 class DiscoverBookAdapter(
-    private val resources: Resources, private val onBookClickListener: (position: Int) -> Unit
+    private val resources: Resources, private val onBookClickListener: (item: Book) -> Unit
 ) : PagingDataAdapter<Book, DiscoverBookAdapter.ViewHolder>(
     COMPARATOR
 ) {
@@ -51,7 +51,9 @@ class DiscoverBookAdapter(
             Picasso.get().load(item.image).into(imageTarget)
 
             bookItemLayout.setOnClickListener {
-                onBookClickListener.invoke(position)
+                getItem(position)?.let {
+                    onBookClickListener.invoke(it)
+                }
             }
         }
     }

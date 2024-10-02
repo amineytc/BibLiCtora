@@ -55,4 +55,17 @@
     <string name="time_picker_title">Choose a time for notification.</string>
     <string name="no_notification">There are no configured notifications.</string>
 
+    <string name="anonymous">Anonymous</string>
+    <string name="reading_now">Reading Now</string>
+    <string name="have_read">Have Read</string>
+    <string name="reading">Reading</string>
+    <string name="will_read">Will Read</string>
+    <string name="bookshelves">Bookshelves:</string>
+    <string name="languages">Languages:</string>
+    <string name="book_picture">Book Picture</string>
+    <string name="line">Grey Line</string>
+    <string name="ic_have_read">İcon Have Read</string>
+    <string name="ic_reading">İcon Reading</string>
+    <string name="ic_will_read">İcon Will Read</string>
+
 </resources>

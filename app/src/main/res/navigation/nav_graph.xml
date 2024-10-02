@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.amineaytac.biblictora.ui.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/navigateToBookDetailFragment"
+            app:destination="@id/bookDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myBooksFragment"
         android:name="com.amineaytac.biblictora.ui.mybooks.MyBooksFragment"
@@ -20,4 +24,13 @@
         android:name="com.amineaytac.biblictora.ui.favorite.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/bookDetailFragment"
+        android:name="com.amineaytac.biblictora.ui.detail.BookDetailFragment"
+        android:label="fragment_book_detail"
+        tools:layout="@layout/fragment_book_detail">
+        <argument
+            android:name="book"
+            app:argType="com.amineaytac.biblictora.core.data.model.Book" />
+    </fragment>
 </navigation>

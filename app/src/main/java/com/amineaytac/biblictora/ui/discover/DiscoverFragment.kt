@@ -9,6 +9,7 @@ import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import com.amineaytac.biblictora.databinding.FragmentDiscoverBinding
 import com.amineaytac.biblictora.ui.discover.adapter.ChipAdapter
 import com.amineaytac.biblictora.ui.discover.adapter.DiscoverBookAdapter
 import com.amineaytac.biblictora.ui.discover.adapter.LoaderAdapter
+import com.amineaytac.biblictora.ui.home.HomeFragmentDirections
 import com.amineaytac.biblictora.util.gone
 import com.amineaytac.biblictora.util.visible
 import com.amineaytc.biblictora.util.viewBinding
@@ -38,9 +40,11 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (viewModel.isFirstRest) {
+            callInitialViewModelFunctions()
+        }
         setComponentVisibility()
         bindBookAdapter()
-        callInitialViewModelFunctions()
         observeUi()
         bindBackDrop()
     }
@@ -73,7 +77,9 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
 
     private fun bindBookAdapter() = with(binding) {
 
-        bookAdapter = DiscoverBookAdapter(resources) {}
+        bookAdapter = DiscoverBookAdapter(resources) {
+            findNavController().navigate(HomeFragmentDirections.navigateToBookDetailFragment(it))
+        }
         rvBook.layoutManager = GridLayoutManager(requireContext(), 2)
         rvBook.setHasFixedSize(true)
         rvBook.adapter = bookAdapter.withLoadStateHeaderAndFooter(
@@ -162,9 +168,11 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
             setComponentVisibility()
 
             if (searchText.isNotEmpty()) {
-                viewModel.getBooksWithSearch(searchText, languages)
+                viewModel.getBooksWithSearchFlow(searchText, languages)
+                viewModel.getBooksWithSearch()
             } else if (languages.isNotEmpty() && searchText.isEmpty()) {
-                viewModel.getBooksWithLanguages(languages)
+                viewModel.getBooksWithLanguagesFlow(languages)
+                viewModel.getBooksWithLanguages()
             } else {
                 viewModel.getAllBooks()
             }
@@ -216,7 +224,8 @@ class DiscoverFragment : Fragment(R.layout.fragment_discover) {
                     inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
                     setComponentVisibility()
                     if (it.isNotEmpty()) {
-                        viewModel.getBooksWithSearch(it, chipClickStatesToLanguageList())
+                        viewModel.getBooksWithSearchFlow(it, chipClickStatesToLanguageList())
+                        viewModel.getBooksWithSearch()
                     } else {
                         viewModel.getAllBooks()
                     }

@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -84,4 +86,7 @@ dependencies {
 
     //TimePicker
     implementation("com.akexorcist:snap-time-picker:1.0.3")
+
+    //Palette
+    implementation("androidx.palette:palette-ktx:1.0.0")
 }
