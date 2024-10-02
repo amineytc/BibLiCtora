@@ -1,5 +1,6 @@
 package com.amineaytac.biblictora.core.data.repo
 
+import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -52,5 +53,9 @@ class BookRepositoryImpl @Inject constructor(
 
     override suspend fun deleteFavoriteItem(book: Book) {
         localDataSource.deleteFavoriteItem(book.toFavoriteItemEntity())
+    }
+
+    override fun isItemFavorited(itemId: String): LiveData<Boolean> {
+        return localDataSource.isItemFavorited(itemId)
     }
 }

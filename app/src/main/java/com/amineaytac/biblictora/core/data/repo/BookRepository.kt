@@ -1,5 +1,6 @@
 package com.amineaytac.biblictora.core.data.repo
 
+import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
 import com.amineaytac.biblictora.core.data.model.Book
 import kotlinx.coroutines.flow.Flow
@@ -17,4 +18,5 @@ interface BookRepository {
     suspend fun getFavoriteItems(): Flow<List<Book>>
     suspend fun addFavoriteItem(book: Book)
     suspend fun deleteFavoriteItem(book: Book)
+    fun isItemFavorited(itemId: String): LiveData<Boolean>
 }
