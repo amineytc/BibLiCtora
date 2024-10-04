@@ -5,7 +5,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.amineaytac.biblictora.core.data.model.Book
-import com.amineaytac.biblictora.core.database.LocalDataSource
+import com.amineaytac.biblictora.core.data.model.ReadingBook
+import com.amineaytac.biblictora.core.database.entity.ReadingStatusEntity
+import com.amineaytac.biblictora.core.database.source.LocalDataSource
 import com.amineaytac.biblictora.core.network.source.paging.PagingSource
 import com.amineaytac.biblictora.core.network.source.rest.RestDataSource
 import kotlinx.coroutines.flow.Flow
@@ -57,5 +59,42 @@ class BookRepositoryImpl @Inject constructor(
 
     override fun isItemFavorited(itemId: String): LiveData<Boolean> {
         return localDataSource.isItemFavorited(itemId)
+    }
+
+    override fun getBookItemReading(itemId: String): LiveData<ReadingStatusEntity> {
+        return localDataSource.getBookItemReading(itemId)
+    }
+
+    override fun isBookItemReading(itemId: String): LiveData<Boolean> {
+        return localDataSource.isBookItemReading(itemId)
+    }
+
+    override fun getReadingPercentage(itemId: Int): LiveData<Int> {
+        return localDataSource.getReadingPercentage(itemId)
+    }
+
+    override suspend fun updateBookStatusAndPercentage(
+        itemId: Int,
+        readingStates: String,
+        readingPercentage: Int
+    ) {
+        localDataSource.updateBookStatusAndPercentage(itemId, readingStates, readingPercentage)
+    }
+
+    override suspend fun updatePercentage(bookId: Int, readingPercentage: Int) {
+        localDataSource.updatePercentage(bookId, readingPercentage)
+    }
+
+    override suspend fun getReadingBookItems(): Flow<List<ReadingBook>> {
+        return localDataSource.getReadingBookItems()
+            .map { it.map { readingStatusEntity -> readingStatusEntity.toReadingBook() } }
+    }
+
+    override suspend fun addReadingBookItem(readingBook: ReadingBook) {
+        localDataSource.addReadingBookItem(readingBook.toStatusEntity())
+    }
+
+    override suspend fun deleteReadingBookItem(readingBook: ReadingBook) {
+        localDataSource.deleteReadingBookItem(readingBook.toStatusEntity())
     }
 }
