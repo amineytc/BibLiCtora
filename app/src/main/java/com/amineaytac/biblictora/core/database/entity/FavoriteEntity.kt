@@ -1,4 +1,4 @@
-package com.amineaytac.biblictora.core.database
+package com.amineaytac.biblictora.core.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

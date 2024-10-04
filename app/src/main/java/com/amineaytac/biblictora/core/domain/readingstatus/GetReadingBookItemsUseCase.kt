@@ -1,4 +1,4 @@
-package com.amineaytac.biblictora.core.domain
+package com.amineaytac.biblictora.core.domain.readingstatus
 
 import com.amineaytac.biblictora.core.data.model.ReadingBook
 import com.amineaytac.biblictora.core.data.repo.BookRepository

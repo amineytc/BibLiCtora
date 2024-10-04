@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.amineaytac.biblictora.core.data.model.Book
-import com.amineaytac.biblictora.core.domain.GetAllBooksUseCase
-import com.amineaytac.biblictora.core.domain.GetBooksWithLanguagesUseCase
-import com.amineaytac.biblictora.core.domain.GetBooksWithSearchUseCase
+import com.amineaytac.biblictora.core.domain.rest.GetAllBooksUseCase
+import com.amineaytac.biblictora.core.domain.rest.GetBooksWithLanguagesUseCase
+import com.amineaytac.biblictora.core.domain.rest.GetBooksWithSearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

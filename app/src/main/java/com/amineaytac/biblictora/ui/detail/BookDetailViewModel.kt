@@ -7,11 +7,11 @@ import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.core.data.model.ReadingBook
 import com.amineaytac.biblictora.core.data.repo.BookRepository
 import com.amineaytac.biblictora.core.database.entity.ReadingStatusEntity
-import com.amineaytac.biblictora.core.domain.AddFavoriteItemUseCase
-import com.amineaytac.biblictora.core.domain.AddReadingBookItemUseCase
-import com.amineaytac.biblictora.core.domain.DeleteFavoriteItemUseCase
-import com.amineaytac.biblictora.core.domain.UpdateBookStatusAndPercentageUseCase
-import com.amineaytac.biblictora.core.domain.UpdatePercentageUseCase
+import com.amineaytac.biblictora.core.domain.favorite.AddFavoriteItemUseCase
+import com.amineaytac.biblictora.core.domain.readingstatus.AddReadingBookItemUseCase
+import com.amineaytac.biblictora.core.domain.favorite.DeleteFavoriteItemUseCase
+import com.amineaytac.biblictora.core.domain.readingstatus.UpdateBookStatusAndPercentageUseCase
+import com.amineaytac.biblictora.core.domain.readingstatus.UpdatePercentageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
