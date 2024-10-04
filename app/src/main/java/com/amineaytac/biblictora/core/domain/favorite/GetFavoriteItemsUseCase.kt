@@ -1,4 +1,4 @@
-package com.amineaytac.biblictora.core.domain
+package com.amineaytac.biblictora.core.domain.favorite
 
 import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.core.data.repo.BookRepository

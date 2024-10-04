@@ -7,9 +7,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
 import androidx.palette.graphics.Palette
 import com.amineaytac.biblictora.R
 import com.amineaytac.biblictora.core.data.model.Book
+import com.amineaytac.biblictora.core.data.model.ReadingBook
+import com.amineaytac.biblictora.core.data.repo.toReadingBook
 import com.amineaytac.biblictora.databinding.FragmentBookDetailBinding
 import com.amineaytac.biblictora.util.gone
 import com.amineaytc.biblictora.util.viewBinding
@@ -27,6 +31,7 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
     private val binding by viewBinding(FragmentBookDetailBinding::bind)
     private val viewModel: BookDetailViewModel by viewModels()
     private var isFavorited = false
+    private var readingBook: ReadingBook? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,6 +53,9 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
         if (arguments != null) {
             val book = BookDetailFragmentArgs.fromBundle(requireArguments()).book
             observeIsItemFavorited(book)
+            observeIsItemReading(book)
+            setReadingStateClickListener(book)
+            bindReadingNow(book)
             if (book.image.isNotEmpty()) {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
@@ -69,40 +77,6 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
             } else {
                 tvBookshelves.text = book.bookshelves.joinToString("\n")
             }
-
-            /* ivWillRead.setOnClickListener {
-                 if(it.background == resources.getDrawable(R.drawable.ic_dark_will_read)){
-                     it.setBackgroundResource(R.drawable.ic_light_will_read)
-                     ivReading.setBackgroundResource(R.drawable.ic_dark_reading)
-                     ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
-                 }else{
-                     it.setBackgroundResource(R.drawable.ic_dark_will_read)
-                     ivReading.setBackgroundResource(R.drawable.ic_light_reading)
-                     ivHaveRead.setBackgroundResource(R.drawable.ic_light_have_read)
-                 }
-             }
-             ivReading.setOnClickListener {
-                 if(it.background == resources.getDrawable(R.drawable.ic_dark_reading)){
-                     it.setBackgroundResource(R.drawable.ic_light_reading)
-                     ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
-                     ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
-                 }else{
-                     it.setBackgroundResource(R.drawable.ic_dark_reading)
-                     ivWillRead.setBackgroundResource(R.drawable.ic_light_will_read)
-                     ivHaveRead.setBackgroundResource(R.drawable.ic_light_have_read)
-                 }
-             }
-             ivHaveRead.setOnClickListener {
-                 if(it.background == resources.getDrawable(R.drawable.ic_dark_have_read)){
-                     it.setBackgroundResource(R.drawable.ic_light_have_read)
-                     ivReading.setBackgroundResource(R.drawable.ic_dark_reading)
-                     ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
-                 }else{
-                     it.setBackgroundResource(R.drawable.ic_dark_have_read)
-                     ivReading.setBackgroundResource(R.drawable.ic_light_reading)
-                     ivWillRead.setBackgroundResource(R.drawable.ic_light_will_read)
-                 }
-             }*/
         }
     }
 
@@ -164,6 +138,188 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
         viewModel.isItemFavorited(book.id.toString()).observe(viewLifecycleOwner) {
             isFavorited = it
             bindHeartView(book)
+        }
+    }
+
+    private fun observeGetItemReading(book: Book) {
+        viewModel.getBookItemReading(book.id.toString()).distinctUntilChanged()
+            .observe(viewLifecycleOwner,
+                Observer {
+                    readingBook = it.toReadingBook()
+                    bindReadingBook(it.toReadingBook())
+                })
+    }
+
+    private fun observeIsItemReading(book: Book) {
+        viewModel.isBookItemReading(book.id.toString()).distinctUntilChanged()
+            .observe(viewLifecycleOwner,
+                Observer {
+                    if (it) {
+                        observeGetItemReading(book)
+                    }
+                })
+    }
+
+    private fun bindReadingBook(readingBook: ReadingBook) = with(binding) {
+        when (readingBook.readingStates) {
+            "willRead" -> {
+                ivWillRead.setBackgroundResource(R.drawable.ic_light_will_read)
+                ivReading.setBackgroundResource(R.drawable.ic_dark_reading)
+                ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
+            }
+
+            "reading" -> {
+                ivReading.setBackgroundResource(R.drawable.ic_light_reading)
+                ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
+                ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
+            }
+
+            "haveRead" -> {
+                ivHaveRead.setBackgroundResource(R.drawable.ic_light_have_read)
+                ivReading.setBackgroundResource(R.drawable.ic_dark_reading)
+                ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
+            }
+        }
+    }
+
+    private fun setReadingStateClickListener(book: Book) = with(binding) {
+
+        ivWillRead.setOnClickListener {
+            if (readingBook != null) {
+                when (readingBook?.readingStates) {
+                    "willRead" -> {
+                        ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
+                        viewModel.deleteReadingBookItem(readingBook!!)
+                    }
+
+                    "reading" -> {
+                        ivReading.setBackgroundResource(R.drawable.ic_dark_reading)
+                        ivWillRead.setBackgroundResource(R.drawable.ic_light_will_read)
+                        viewModel.updateBookStatusAndPercentage(readingBook!!.id, "willRead", 0)
+                    }
+
+                    "haveRead" -> {
+                        ivWillRead.setBackgroundResource(R.drawable.ic_light_will_read)
+                        ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
+                        viewModel.updateBookStatusAndPercentage(readingBook!!.id, "willRead", 0)
+                    }
+                }
+            } else {
+                ivWillRead.setBackgroundResource(R.drawable.ic_light_will_read)
+                val reading = ReadingBook(
+                    id = book.id,
+                    authors = book.authors,
+                    bookshelves = book.bookshelves,
+                    languages = book.languages,
+                    title = book.title,
+                    formats = book.formats,
+                    image = book.image,
+                    readingStates = "willRead",
+                    readingPercentage = 0
+                )
+                viewModel.addReadingBookItem(reading)
+            }
+        }
+        ivReading.setOnClickListener {
+            if (readingBook != null) {
+                when (readingBook?.readingStates) {
+                    "willRead" -> {
+                        ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
+                        ivReading.setBackgroundResource(R.drawable.ic_light_reading)
+                        viewModel.updateBookStatusAndPercentage(readingBook!!.id, "reading", 0)
+                    }
+
+                    "reading" -> {
+                        ivReading.setBackgroundResource(R.drawable.ic_dark_reading)
+                        viewModel.deleteReadingBookItem(readingBook!!)
+                    }
+
+                    "haveRead" -> {
+                        ivReading.setBackgroundResource(R.drawable.ic_light_reading)
+                        ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
+                        viewModel.updateBookStatusAndPercentage(readingBook!!.id, "reading", 0)
+                    }
+                }
+            } else {
+                ivReading.setBackgroundResource(R.drawable.ic_light_reading)
+                val reading = ReadingBook(
+                    id = book.id,
+                    authors = book.authors,
+                    bookshelves = book.bookshelves,
+                    languages = book.languages,
+                    title = book.title,
+                    formats = book.formats,
+                    image = book.image,
+                    readingStates = "reading",
+                    readingPercentage = 0
+                )
+                viewModel.addReadingBookItem(reading)
+            }
+        }
+        ivHaveRead.setOnClickListener {
+            if (readingBook != null) {
+                when (readingBook?.readingStates) {
+                    "willRead" -> {
+                        ivHaveRead.setBackgroundResource(R.drawable.ic_light_have_read)
+                        ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
+                        viewModel.updateBookStatusAndPercentage(readingBook!!.id, "haveRead", 100)
+                    }
+
+                    "reading" -> {
+                        ivReading.setBackgroundResource(R.drawable.ic_dark_reading)
+                        ivHaveRead.setBackgroundResource(R.drawable.ic_light_have_read)
+                        viewModel.updateBookStatusAndPercentage(readingBook!!.id, "haveRead", 100)
+                    }
+
+                    "haveRead" -> {
+                        ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
+                        viewModel.deleteReadingBookItem(readingBook!!)
+                    }
+                }
+            } else {
+                ivHaveRead.setBackgroundResource(R.drawable.ic_light_have_read)
+                val reading = ReadingBook(
+                    id = book.id,
+                    authors = book.authors,
+                    bookshelves = book.bookshelves,
+                    languages = book.languages,
+                    title = book.title,
+                    formats = book.formats,
+                    image = book.image,
+                    readingStates = "haveRead",
+                    readingPercentage = 100
+                )
+                viewModel.addReadingBookItem(reading)
+            }
+        }
+    }
+
+    private fun bindReadingNow(book: Book) = with(binding) {
+        btnReadingNow.setOnClickListener {
+            if (readingBook != null) {
+                if (readingBook?.readingStates != "reading") {
+                    ivReading.setBackgroundResource(R.drawable.ic_light_reading)
+                    ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
+                    ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
+                    viewModel.updateBookStatusAndPercentage(readingBook!!.id, "reading", 0)
+                }
+            } else {
+                ivReading.setBackgroundResource(R.drawable.ic_light_reading)
+                ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
+                ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
+                val reading = ReadingBook(
+                    id = book.id,
+                    authors = book.authors,
+                    bookshelves = book.bookshelves,
+                    languages = book.languages,
+                    title = book.title,
+                    formats = book.formats,
+                    image = book.image,
+                    readingStates = "reading",
+                    readingPercentage = 0
+                )
+                viewModel.addReadingBookItem(reading)
+            }
         }
     }
 

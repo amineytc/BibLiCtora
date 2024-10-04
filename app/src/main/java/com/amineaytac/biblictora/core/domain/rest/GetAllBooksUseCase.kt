@@ -1,4 +1,4 @@
-package com.amineaytac.biblictora.core.domain
+package com.amineaytac.biblictora.core.domain.rest
 
 import androidx.paging.PagingData
 import com.amineaytac.biblictora.core.data.model.Book

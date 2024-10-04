@@ -1,7 +1,7 @@
 package com.amineaytac.biblictora.core.database.di
 
-import com.amineaytac.biblictora.core.database.LocalDataSource
-import com.amineaytac.biblictora.core.database.LocalDataSourceImpl
+import com.amineaytac.biblictora.core.database.source.LocalDataSource
+import com.amineaytac.biblictora.core.database.source.LocalDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

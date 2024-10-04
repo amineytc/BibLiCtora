@@ -1,4 +1,4 @@
-package com.amineaytac.biblictora.core.database
+package com.amineaytac.biblictora.core.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.amineaytac.biblictora.core.database.entity.FavoriteEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
