@@ -22,8 +22,13 @@ object DatabaseModule {
         context = context,
         klass = BiblictoraDatabase::class.java,
         name = "biblictora_database"
-    ).build()
+    )
+        .fallbackToDestructiveMigration()
+        .build()
 
     @Provides
     fun provideDao(database: BiblictoraDatabase) = database.favoriteDao()
+
+    @Provides
+    fun provideReadingDao(database: BiblictoraDatabase) = database.readingStatusDao()
 }
