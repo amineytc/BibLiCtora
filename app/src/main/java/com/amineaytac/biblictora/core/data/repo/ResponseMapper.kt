@@ -2,7 +2,9 @@ package com.amineaytac.biblictora.core.data.repo
 
 import com.amineaytac.biblictora.core.data.model.Book
 import com.amineaytac.biblictora.core.data.model.ReadFormats
-import com.amineaytac.biblictora.core.database.FavoriteEntity
+import com.amineaytac.biblictora.core.data.model.ReadingBook
+import com.amineaytac.biblictora.core.database.entity.FavoriteEntity
+import com.amineaytac.biblictora.core.database.entity.ReadingStatusEntity
 import com.amineaytac.biblictora.core.network.dto.Author
 import com.amineaytac.biblictora.core.network.dto.BookResponse
 import com.amineaytac.biblictora.core.network.dto.Formats
@@ -125,5 +127,33 @@ fun Book.toFavoriteItemEntity(): FavoriteEntity {
         title = title,
         formats = formats,
         image = image
+    )
+}
+
+fun ReadingStatusEntity.toReadingBook(): ReadingBook {
+    return ReadingBook(
+        id = this.id,
+        authors = this.authors,
+        bookshelves = this.bookshelves,
+        languages = this.languages,
+        title = this.title,
+        formats = this.formats,
+        image = this.image,
+        readingStates = this.readingStates,
+        readingPercentage = this.readingPercentage
+    )
+}
+
+fun ReadingBook.toStatusEntity(): ReadingStatusEntity {
+    return ReadingStatusEntity(
+        id = this.id,
+        authors = this.authors,
+        bookshelves = this.bookshelves,
+        languages = this.languages,
+        title = this.title,
+        formats = this.formats,
+        image = this.image,
+        readingStates = this.readingStates,
+        readingPercentage = this.readingPercentage
     )
 }
