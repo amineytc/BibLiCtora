@@ -68,4 +68,6 @@
     <string name="ic_reading">İcon Reading</string>
     <string name="ic_will_read">İcon Will Read</string>
 
+    <string name="ic_reading_status">İcon Reading Status</string>
+    
 </resources>
