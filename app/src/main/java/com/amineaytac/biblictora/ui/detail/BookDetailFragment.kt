@@ -8,6 +8,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.distinctUntilChanged
+import androidx.navigation.fragment.findNavController
 import androidx.palette.graphics.Palette
 import com.amineaytac.biblictora.R
 import com.amineaytac.biblictora.core.data.model.Book
@@ -192,6 +193,7 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                         ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
                         viewModel.deleteReadingBookItem(readingBook!!)
                         isAddBookInReadingList = false
+                        readingBook = null
                     }
 
                     "reading" -> {
@@ -235,6 +237,7 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                         ivReading.setBackgroundResource(R.drawable.ic_dark_reading)
                         viewModel.deleteReadingBookItem(readingBook!!)
                         isAddBookInReadingList = false
+                        readingBook = null
                     }
 
                     "haveRead" -> {
@@ -278,6 +281,7 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                         ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
                         viewModel.deleteReadingBookItem(readingBook!!)
                         isAddBookInReadingList = false
+                        readingBook = null
                     }
                 }
             } else {
@@ -306,6 +310,17 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
                     ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
                     viewModel.updateBookStatusAndPercentage(readingBook!!.id, "reading", 0)
+                    findNavController().navigate(
+                        BookDetailFragmentDirections.navigateToReadingFragment(
+                            readingBook!!
+                        )
+                    )
+                } else {
+                    findNavController().navigate(
+                        BookDetailFragmentDirections.navigateToReadingFragment(
+                            readingBook!!
+                        )
+                    )
                 }
             } else {
                 ivReading.setBackgroundResource(R.drawable.ic_light_reading)
@@ -323,6 +338,11 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     readingPercentage = 0
                 )
                 viewModel.addReadingBookItem(reading)
+                findNavController().navigate(
+                    BookDetailFragmentDirections.navigateToReadingFragment(
+                        reading
+                    )
+                )
             }
         }
     }
