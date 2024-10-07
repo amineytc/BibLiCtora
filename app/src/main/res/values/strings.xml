@@ -73,5 +73,6 @@
     <string name="reading_list_empty">Your reading list is empty!</string>
 
     <string name="book_detail">Book Detail</string>
+    <string name="ic_book">Icon Book</string>
 
 </resources>
