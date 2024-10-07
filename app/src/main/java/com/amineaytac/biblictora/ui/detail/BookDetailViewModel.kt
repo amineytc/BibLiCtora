@@ -8,8 +8,9 @@ import com.amineaytac.biblictora.core.data.model.ReadingBook
 import com.amineaytac.biblictora.core.data.repo.BookRepository
 import com.amineaytac.biblictora.core.database.entity.ReadingStatusEntity
 import com.amineaytac.biblictora.core.domain.favorite.AddFavoriteItemUseCase
-import com.amineaytac.biblictora.core.domain.readingstatus.AddReadingBookItemUseCase
 import com.amineaytac.biblictora.core.domain.favorite.DeleteFavoriteItemUseCase
+import com.amineaytac.biblictora.core.domain.readingstatus.AddReadingBookItemUseCase
+import com.amineaytac.biblictora.core.domain.readingstatus.DeleteReadingBookItemUseCase
 import com.amineaytac.biblictora.core.domain.readingstatus.UpdateBookStatusAndPercentageUseCase
 import com.amineaytac.biblictora.core.domain.readingstatus.UpdatePercentageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +23,7 @@ class BookDetailViewModel @Inject constructor(
     private val deleteFavoriteItemUseCase: DeleteFavoriteItemUseCase,
     private val bookRepository: BookRepository,
     private val addReadingBookItemUseCase: AddReadingBookItemUseCase,
-    private val deleteReadingBookItemUseCase: AddReadingBookItemUseCase,
+    private val deleteReadingBookItemUseCase: DeleteReadingBookItemUseCase,
     private val updatePercentageUseCase: UpdatePercentageUseCase,
     private val updateBookStatusAndPercentageUseCase: UpdateBookStatusAndPercentageUseCase
 
