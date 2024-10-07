@@ -13,5 +13,6 @@ data class ReadingBook(
     val formats: ReadFormats,
     val image: String,
     val readingStates: String,
-    val readingPercentage: Int
+    val readingPercentage: Int,
+    val readingProgress: Int
 ) : Parcelable
