@@ -219,7 +219,8 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     formats = book.formats,
                     image = book.image,
                     readingStates = "willRead",
-                    readingPercentage = 0
+                    readingPercentage = 0,
+                    readingProgress = 0
                 )
                 viewModel.addReadingBookItem(reading)
             }
@@ -257,7 +258,8 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     formats = book.formats,
                     image = book.image,
                     readingStates = "reading",
-                    readingPercentage = 0
+                    readingPercentage = 0,
+                    readingProgress = 0
                 )
                 viewModel.addReadingBookItem(reading)
             }
@@ -295,7 +297,8 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     formats = book.formats,
                     image = book.image,
                     readingStates = "haveRead",
-                    readingPercentage = 100
+                    readingPercentage = 100,
+                    readingProgress = 0
                 )
                 viewModel.addReadingBookItem(reading)
             }
@@ -335,7 +338,8 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     formats = book.formats,
                     image = book.image,
                     readingStates = "reading",
-                    readingPercentage = 0
+                    readingPercentage = 0,
+                    readingProgress = 0
                 )
                 viewModel.addReadingBookItem(reading)
                 findNavController().navigate(
