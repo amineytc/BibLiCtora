@@ -35,6 +35,9 @@
         <argument
             android:name="book"
             app:argType="com.amineaytac.biblictora.core.data.model.Book" />
+        <action
+            android:id="@+id/navigateToReadingFragment"
+            app:destination="@id/readingFragment" />
     </fragment>
     <fragment
         android:id="@+id/readingFragment"
