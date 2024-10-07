@@ -69,5 +69,7 @@
     <string name="ic_will_read">İcon Will Read</string>
 
     <string name="ic_reading_status">İcon Reading Status</string>
-    
+
+    <string name="reading_list_empty">Your reading list is empty!</string>
+
 </resources>
