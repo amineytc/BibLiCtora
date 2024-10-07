@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.palette.graphics.Palette
 import com.amineaytac.biblictora.R
@@ -32,6 +31,7 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
     private val viewModel: BookDetailViewModel by viewModels()
     private var isFavorited = false
     private var readingBook: ReadingBook? = null
+    private var isAddBookInReadingList = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -143,21 +143,22 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
 
     private fun observeGetItemReading(book: Book) {
         viewModel.getBookItemReading(book.id.toString()).distinctUntilChanged()
-            .observe(viewLifecycleOwner,
-                Observer {
+            .observe(viewLifecycleOwner) {
+                if (isAddBookInReadingList) {
                     readingBook = it.toReadingBook()
                     bindReadingBook(it.toReadingBook())
-                })
+                }
+            }
     }
 
     private fun observeIsItemReading(book: Book) {
         viewModel.isBookItemReading(book.id.toString()).distinctUntilChanged()
-            .observe(viewLifecycleOwner,
-                Observer {
-                    if (it) {
-                        observeGetItemReading(book)
-                    }
-                })
+            .observe(viewLifecycleOwner) {
+                isAddBookInReadingList = it
+                if (it) {
+                    observeGetItemReading(book)
+                }
+            }
     }
 
     private fun bindReadingBook(readingBook: ReadingBook) = with(binding) {
@@ -190,6 +191,7 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     "willRead" -> {
                         ivWillRead.setBackgroundResource(R.drawable.ic_dark_will_read)
                         viewModel.deleteReadingBookItem(readingBook!!)
+                        isAddBookInReadingList = false
                     }
 
                     "reading" -> {
@@ -232,6 +234,7 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     "reading" -> {
                         ivReading.setBackgroundResource(R.drawable.ic_dark_reading)
                         viewModel.deleteReadingBookItem(readingBook!!)
+                        isAddBookInReadingList = false
                     }
 
                     "haveRead" -> {
@@ -274,6 +277,7 @@ class BookDetailFragment : Fragment(R.layout.fragment_book_detail) {
                     "haveRead" -> {
                         ivHaveRead.setBackgroundResource(R.drawable.ic_dark_have_read)
                         viewModel.deleteReadingBookItem(readingBook!!)
+                        isAddBookInReadingList = false
                     }
                 }
             } else {
