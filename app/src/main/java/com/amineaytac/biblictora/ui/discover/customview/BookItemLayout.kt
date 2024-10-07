@@ -14,8 +14,23 @@ import com.amineaytac.biblictora.R
 class BookItemLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+
+    private var whichItem: String? = null
+
     init {
         setWillNotDraw(false)
+        attrs?.let {
+            val typedArray = context.obtainStyledAttributes(it, R.styleable.BookItemLayout, 0, 0)
+            whichItem = typedArray.getString(R.styleable.BookItemLayout_whichItem)
+            typedArray.recycle()
+        }
+        if (whichItem != null) {
+            if (whichItem == "item_reading_list") {
+                changeFillPaint(true)
+            }
+        } else {
+            changeFillPaint(false)
+        }
     }
 
     private val framePath = Path()
@@ -28,9 +43,20 @@ class BookItemLayout @JvmOverloads constructor(
         strokeWidth = frameStrokeWidth.toFloat()
     }
 
-    private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.toad)
-        style = Paint.Style.FILL
+    private lateinit var fillPaint: Paint
+
+    private fun changeFillPaint(bool: Boolean) {
+        if (bool) {
+            fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = ContextCompat.getColor(context, R.color.white)
+                style = Paint.Style.FILL
+            }
+        } else {
+            fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = ContextCompat.getColor(context, R.color.toad)
+                style = Paint.Style.FILL
+            }
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
