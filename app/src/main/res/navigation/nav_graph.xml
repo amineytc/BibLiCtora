@@ -13,9 +13,6 @@
         <action
             android:id="@+id/navigateToBookDetailFragment"
             app:destination="@id/bookDetailFragment" />
-        <action
-            android:id="@+id/navigateToReadingFragment"
-            app:destination="@id/readingFragment" />
     </fragment>
     <fragment
         android:id="@+id/myBooksFragment"
@@ -35,14 +32,5 @@
         <argument
             android:name="book"
             app:argType="com.amineaytac.biblictora.core.data.model.Book" />
-    </fragment>
-    <fragment
-        android:id="@+id/readingFragment"
-        android:name="com.amineaytac.biblictora.ui.reading.ReadingFragment"
-        android:label="fragment_reading"
-        tools:layout="@layout/fragment_reading">
-        <argument
-            android:name="readingBook"
-            app:argType="com.amineaytac.biblictora.core.data.model.ReadingBook" />
     </fragment>
 </navigation>
